@@ -1,0 +1,369 @@
+/* Finowise — enhancement layer: kinetic hero, editorial marquee, leadership rail, mission/vision styling */
+
+/* ---------- Kinetic hero: masked line reveal + cinematic depth ---------- */
+.banner-slide .banner-img {
+  will-change: transform;
+}
+.banner-slide.active .banner-img {
+  animation: fw-kenburns 14s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes fw-kenburns {
+  from { transform: scale(1); }
+  to { transform: scale(1.07); }
+}
+
+.banner-slide.active .banner-text h1 {
+  animation: fw-line-mask 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 0.32s;
+}
+@keyframes fw-line-mask {
+  from { clip-path: inset(0 0 100% 0); opacity: 0.001; transform: translateY(38px); }
+  to { clip-path: inset(0 0 -12% 0); opacity: 1; transform: translateY(0); }
+}
+.banner-slide.active .banner-text > p {
+  animation: fw-line-mask 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 0.55s;
+}
+.banner-slide.active .banner-text .banner-hero-btns {
+  animation: fw-line-mask 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 0.7s;
+}
+.banner-slide.active .banner-text .journey-label {
+  animation: fw-line-mask 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 0.15s;
+}
+
+/* ---------- Editorial marquee ---------- */
+.brand-marquee {
+  background: var(--bg-dark, #002830);
+  color: #F4E9D2;
+  overflow: hidden;
+  padding: 22px 0;
+  border-top: 1px solid rgba(212, 137, 58, 0.35);
+  border-bottom: 1px solid rgba(212, 137, 58, 0.35);
+}
+.brand-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: fw-marquee 46s linear infinite;
+}
+.brand-marquee:hover .brand-marquee-track {
+  animation-play-state: paused;
+}
+.brand-marquee-track span {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-style: italic;
+}
+.brand-marquee-track .dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold, #D4893A);
+  margin: 0 30px;
+  flex: none;
+}
+@keyframes fw-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ---------- Mission & Vision — bold, larger, brand colour (TSK-04) ---------- */
+.mv-block .subtitle {
+  font-weight: 700;
+}
+.mv-block h2 {
+  font-size: clamp(1.9rem, 3.4vw, 2.7rem);
+  font-weight: 800;
+  color: var(--primary, #C63204);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  margin-bottom: 14px;
+  position: relative;
+  padding-bottom: 16px;
+}
+.mv-block h2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 64px;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--gold, #D4893A), var(--primary, #C63204));
+}
+.mv-block p {
+  font-size: 1.08rem;
+  line-height: 1.75;
+  color: var(--text, #333);
+  font-weight: 500;
+}
+
+/* ---------- Leadership rail — "United by a Shared Vision" (TSK-01) ---------- */
+.leadership-rail {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 18px;
+  margin: 36px 0 28px;
+}
+.leadership-rail figure {
+  margin: 0;
+  text-align: center;
+}
+.leadership-rail .rail-photo {
+  width: 100%;
+  aspect-ratio: 1 / 1.18;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 14px;
+  border: 3px solid #fff;
+  box-shadow: 0 10px 28px rgba(0, 40, 48, 0.16);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+}
+.leadership-rail figure:hover .rail-photo {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 18px 36px rgba(198, 50, 4, 0.22);
+}
+.leadership-rail figcaption {
+  margin-top: 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--secondary, #002830);
+}
+.leadership-rail figcaption small {
+  line-height: 1.4;
+  display: block;
+  font-weight: 500;
+  color: var(--text-light, #666);
+  font-size: 0.74rem;
+  margin-top: 2px;
+}
+
+/* ---------- Founder feature — Manish Singh, CFP® (TSK-02 / TSK-10) ---------- */
+.founder-feature {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+  background: linear-gradient(135deg, #002830 0%, #003540 100%);
+  border-radius: 20px;
+  padding: 34px 36px;
+  margin: 34px 0 30px;
+  color: #fff;
+  box-shadow: 0 20px 44px rgba(0, 40, 48, 0.28);
+  position: relative;
+  overflow: hidden;
+}
+.founder-feature::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 137, 58, 0.28), transparent 70%);
+}
+.founder-photo {
+  flex: none;
+  width: 168px;
+  height: 198px;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 14px;
+  border: 3px solid var(--gold, #D4893A);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+}
+.founder-body .subtitle {
+  color: var(--gold, #D4893A);
+  display: inline-block;
+}
+.founder-body h3 {
+  margin: 8px 0 4px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.founder-role {
+  color: #F4E9D2;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 14px;
+}
+.founder-body p:last-child {
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.7;
+  font-size: 0.98rem;
+}
+
+/* ---------- Contact form fallback notice (TSK-08) ---------- */
+.fw-form-fallback {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translate(-50%, 140%);
+  width: min(560px, calc(100vw - 32px));
+  background: #002830;
+  color: #fff;
+  border: 1px solid rgba(212, 137, 58, 0.5);
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
+  z-index: 12000;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.fw-form-fallback.visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.fw-fallback-text {
+  flex: 1;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.fw-fallback-text strong { color: var(--gold, #D4893A); }
+.fw-fallback-btn {
+  flex: none;
+  background: #25D366;
+  color: #06301c;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 10px 16px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.fw-fallback-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(37, 211, 102, 0.4); }
+.fw-fallback-close {
+  flex: none;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.3rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .leadership-rail { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .founder-feature { flex-direction: column; align-items: center; text-align: center; padding: 28px 22px; }
+  .founder-photo { width: 150px; height: 176px; }
+  .mv-block h2 { font-size: 1.7rem; }
+  .mv-block h2::after { left: 50%; transform: translateX(-50%); }
+}
+@media (max-width: 480px) {
+  .leadership-rail { grid-template-columns: repeat(2, 1fr); }
+  .brand-marquee-track span { font-size: 0.9rem; }
+  .fw-form-fallback { flex-wrap: wrap; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .banner-slide.active .banner-img,
+  .banner-slide.active .banner-text h1,
+  .banner-slide.active .banner-text > p,
+  .banner-slide.active .banner-text .banner-hero-btns,
+  .banner-slide.active .banner-text .journey-label { animation: none; }
+  .brand-marquee-track { animation-duration: 120s; }
+}
+/* Leadership Profile card: name must read on the dark background */
+.founder-feature .founder-body h3 { color: #fff; }
+
+/* Who We Are → Vision & Mission on the rocket-launch background */
+.mv-launch {
+  position: relative; overflow: hidden; color: #fff;
+  background:
+    radial-gradient(ellipse at 50% 115%, rgba(240, 122, 42, 0.45) 0%, rgba(198, 50, 4, 0.18) 30%, transparent 62%),
+    linear-gradient(180deg, #02121a 0%, #052733 55%, #0a3a46 100%);
+}
+.mv-launch-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background: url('../images/rocket-launch.jpg') center 45% / cover no-repeat;
+  opacity: 0.32;
+}
+.mv-launch .container { position: relative; z-index: 1; }
+.mv-launch .mv-block > div {
+  padding: 34px 32px;
+  border-radius: 14px;
+  background: rgba(4, 22, 30, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+.mv-launch .mv-block .subtitle { color: #F07A2A; }
+.mv-launch .mv-block h2 { color: #fff; }
+.mv-launch .mv-block p { color: rgba(255, 255, 255, 0.9); }
+@media (max-width: 900px) { .mv-launch .mv-block > div { text-align: center; padding: 28px 22px; } }
+
+/* ---------- Leadership rail: click a photo to see the person's details ---------- */
+.leadership-rail .rail-btn {
+  display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer;
+  position: relative; border-radius: 14px;
+}
+.leadership-rail .rail-btn:focus-visible { outline: 3px solid var(--primary, #C63204); outline-offset: 3px; }
+.leadership-rail .rail-more {
+  position: absolute; left: 50%; bottom: 12px; transform: translate(-50%, 6px);
+  padding: 6px 12px; border-radius: 999px; white-space: nowrap;
+  background: rgba(0, 40, 48, 0.88); color: #fff; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em;
+  opacity: 0; transition: opacity 0.25s ease, transform 0.25s ease; pointer-events: none;
+}
+.leadership-rail .rail-btn:hover .rail-more,
+.leadership-rail .rail-btn:focus-visible .rail-more { opacity: 1; transform: translate(-50%, 0); }
+@media (hover: none) { .leadership-rail .rail-more { opacity: 1; transform: translate(-50%, 0); font-size: 0.65rem; padding: 4px 9px; } }
+
+html.modal-open, html.modal-open body { overflow: hidden; }
+.team-modal { position: fixed; inset: 0; z-index: 2000; display: grid; place-items: center; padding: 16px; }
+.team-modal[hidden] { display: none; }
+.team-modal-backdrop { position: absolute; inset: 0; background: rgba(0, 20, 26, 0.7); }
+.team-modal-card {
+  position: relative; width: min(760px, 100%); max-height: calc(100vh - 32px); overflow: auto;
+  background: #fff; border-radius: 18px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35); outline: none;
+  animation: tmIn 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes tmIn { from { opacity: 0; transform: translateY(14px) scale(0.98); } to { opacity: 1; transform: none; } }
+.team-modal-body { display: grid; grid-template-columns: 240px 1fr; }
+.team-modal-body > img { width: 100%; height: 100%; min-height: 300px; object-fit: cover; object-position: center top; border-radius: 18px 0 0 18px; }
+.team-modal-body > div { padding: 36px 34px 32px; }
+.team-modal-body h3 { margin: 0 0 6px; font-size: 1.6rem; color: var(--secondary, #002830); }
+.team-modal-body .tm-role { margin: 0 0 16px; font-weight: 700; color: var(--primary, #C63204); }
+.team-modal-body p { line-height: 1.75; color: var(--text, #333); }
+.team-modal-close {
+  position: absolute; top: 10px; right: 12px; z-index: 1; width: 38px; height: 38px; border-radius: 50%;
+  border: 0; background: rgba(0, 40, 48, 0.08); color: var(--secondary, #002830); font-size: 1.6rem; line-height: 1; cursor: pointer;
+}
+.team-modal-close:hover { background: var(--primary, #C63204); color: #fff; }
+@media (max-width: 640px) {
+  .team-modal-body { grid-template-columns: 1fr; }
+  .team-modal-body > img { height: 260px; min-height: 0; border-radius: 18px 18px 0 0; }
+  .team-modal-body > div { padding: 22px 20px 24px; }
+}
+
+/* Pop-up: show the complete portrait (shoulders included) and use a slightly smaller type size (meeting 26 Oct) */
+.team-modal-body > img {
+  object-fit: contain; object-position: center bottom;
+  background: linear-gradient(180deg, #f3f6f7 0%, #e7eef0 100%);
+  min-height: 320px;
+}
+.team-modal-body > div { padding: 30px 30px 26px; }
+.team-modal-body h3 { font-size: 1.35rem; }
+.team-modal-body .tm-role { font-size: 0.92rem; margin-bottom: 12px; }
+.team-modal-body p { font-size: 0.92rem; line-height: 1.65; margin-bottom: 10px; }
+@media (max-width: 640px) {
+  .team-modal-body > img { height: 300px; min-height: 0; }
+}
+.team-modal-body { align-items: center; }
+.team-modal-body > img { height: auto; min-height: 0; aspect-ratio: auto; object-fit: contain; background: none; border-radius: 18px 0 0 18px; margin-left: 18px; width: calc(100% - 18px); border-radius: 14px; }
+@media (max-width: 640px) { .team-modal-body > img { width: 100%; margin: 0; height: auto; border-radius: 18px 18px 0 0; } }
+
+/* Scrolling band under the banner: smaller, regular-size text (27 Oct) */
+.brand-marquee { padding: 14px 0; }
+.brand-marquee-track span { font-family: 'Inter', Arial, sans-serif; font-size: 0.8rem; font-style: normal; font-weight: 600; letter-spacing: 0.16em; }
+.brand-marquee-track .dot { width: 5px; height: 5px; margin: 0 22px; }
+@media (max-width: 768px) { .brand-marquee-track span { font-size: 0.72rem; } }

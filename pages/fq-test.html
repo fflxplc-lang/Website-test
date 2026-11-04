@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Know Your FQ Score | Freedom LifeX Group</title>
+  <meta name="description" content="Take the Finowise Financial Quotient (FQ) test — a 2-minute self-assessment of your money habits across earning, saving, investing, protection and planning." />
+  <meta name="keywords" content="Finowise, FQ Score, Financial Quotient, AMFI Registered Mutual Fund and SIF Distributor, ARN-263895, Financial Freedom" />
+  <link rel="icon" href="../images/favicon.svg?v=2" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .fq-wrap{max-width:820px;margin:0 auto}
+    .fq-card{background:#fff;border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow-md);padding:40px}
+    .fq-step{display:none}.fq-step.is-active{display:block;animation:fqIn .45s ease}
+    @keyframes fqIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    .fq-kicker{display:inline-block;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--primary);margin-bottom:10px}
+    .fq-card h2{font-family:'Playfair Display',serif;color:var(--secondary);font-size:1.9rem;margin:0 0 12px}
+    .fq-pillars{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:26px 0}
+    .fq-pillar{background:var(--bg-light);border-radius:12px;padding:14px 8px;text-align:center;font-size:.82rem;font-weight:600;color:var(--secondary)}
+    .fq-pillar i{display:block;font-size:1.2rem;color:var(--primary);margin-bottom:6px}
+    .fq-progress{height:8px;background:var(--teal-soft);border-radius:99px;overflow:hidden;margin:6px 0 26px}
+    .fq-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .4s ease}
+    .fq-meta{display:flex;justify-content:space-between;font-size:.85rem;color:var(--text-light);font-weight:600}
+    .fq-q{font-family:'Playfair Display',serif;font-size:1.45rem;color:var(--secondary);margin:4px 0 22px;line-height:1.35}
+    .fq-options{display:grid;gap:12px}
+    .fq-option{display:flex;align-items:center;gap:14px;text-align:left;width:100%;background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:16px 18px;font:inherit;font-size:.98rem;color:var(--text);cursor:pointer;transition:border-color .2s,background-color .2s,transform .2s}
+    .fq-option:hover{border-color:var(--primary);transform:translateX(4px)}
+    .fq-option.is-selected{border-color:var(--primary);background:rgba(var(--primary-rgb),.06)}
+    .fq-option .fq-letter{flex:0 0 32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--bg-light);font-weight:700;color:var(--secondary)}
+    .fq-option.is-selected .fq-letter{background:var(--primary);color:#fff}
+    .fq-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;gap:12px}
+    .fq-result-head{display:flex;gap:32px;align-items:center;flex-wrap:wrap}
+    .fq-ring{position:relative;width:170px;height:170px;flex:0 0 170px}
+    .fq-ring svg{transform:rotate(-90deg)}
+    .fq-ring-val{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+    .fq-ring-val strong{display:block;font-family:'Playfair Display',serif;font-size:2.8rem;color:var(--secondary);line-height:1}
+    .fq-ring-val small{color:var(--text-light);font-weight:600}
+    .fq-band{display:inline-block;padding:6px 14px;border-radius:99px;font-weight:700;font-size:.85rem;margin-bottom:10px;color:#fff;background:var(--primary)}
+    .fq-bars{display:grid;gap:14px;margin:30px 0}
+    .fq-bar-row{display:grid;grid-template-columns:120px 1fr 48px;gap:12px;align-items:center;font-size:.9rem;font-weight:600;color:var(--secondary)}
+    .fq-bar{height:10px;background:var(--teal-soft);border-radius:99px;overflow:hidden}
+    .fq-bar span{display:block;height:100%;background:var(--secondary);border-radius:99px;transition:width .8s ease}
+    .fq-tips{background:var(--bg-light);border-radius:14px;padding:22px 24px;margin-top:8px}
+    .fq-tips h4{margin:0 0 10px;color:var(--secondary)}
+    .fq-tips li{margin-bottom:8px;color:var(--text)}
+    .fq-msg{padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:14px}
+    .fq-msg.err{color:#e74c3c;background:#fdf0ef}.fq-msg.ok{color:#1e7e4a;background:#eaf7ef}
+    .fq-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+    @media(max-width:768px){.fq-card{padding:24px 18px}.fq-pillars{grid-template-columns:repeat(3,1fr)}.fq-q{font-size:1.2rem}.fq-bar-row{grid-template-columns:96px 1fr 40px;font-size:.82rem}.fq-ring{margin:0 auto}.fq-result-head{justify-content:center;text-align:center}}
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div class="container">
+      <div class="top-bar-left">
+        <a href="mailto:connect@finowise.in"><i class="fa-solid fa-envelope"></i> connect@finowise.in</a>
+        <a href="tel:+919137654191"><i class="fa-solid fa-phone"></i> +91 91376 54191</a>
+      </div>
+      <div class="top-bar-right">
+        <span class="top-bar-amfi"><i class="fa-solid fa-shield-halved"></i> AMFI Registered Mutual Fund and SIF Distributor · ARN-263895</span>
+      </div>
+    </div>
+  </div>
+
+  <nav class="navbar">
+    <div class="container">
+      <a href="../index.html" class="nav-logo">
+        <img src="../images/logo.png" alt="Freedom LifeX Group" class="nav-logo-img" />
+      </a>
+      <div class="nav-menu">
+        <div class="nav-item"><a href="../index.html" class="nav-link">Home</a></div>
+
+        <div class="nav-item">
+          <a href="javascript:void(0)" class="nav-link">About Us <i class="fa-solid fa-chevron-down arrow"></i></a>
+          <div class="dropdown">
+            <a href="../index.html#who-we-are">Who We Are</a>
+            <a href="../index.html#what-we-do">What We Do</a>
+            <a href="../index.html#why-we-do">Why We Do What We Do</a>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <a href="javascript:void(0)" class="nav-link">Our Approach <i class="fa-solid fa-chevron-down arrow"></i></a>
+          <div class="dropdown">
+            <a href="philosophy.html">Investment Philosophy</a>
+            <a href="solutions.html">Our Solutions</a>
+            <a href="solutions-7-events.html">Our Flagship Strategies</a>
+            <a href="services.html">Our Services</a>
+          </div>
+        </div>
+
+        <div class="nav-item"><a href="contact.html" class="nav-link">Contact</a></div>
+        <div class="nav-item">
+          <a href="javascript:void(0)" class="nav-link">Investor Zone <i class="fa-solid fa-chevron-down arrow"></i></a>
+          <div class="dropdown">
+            <a href="calculators.html">Investor Tools</a>
+            <a href="faqs.html">FAQs</a>
+            <a href="unclaimed.html">Find Unclaimed Amount</a>
+            <a href="important-links.html">Important Links</a>
+            <a href="investor-resources.html">Investor Resources</a>
+            <a href="disclosure.html">Disclosure</a>
+          </div>
+        </div>
+        <div class="nav-cta">
+          <a href="fq-test.html" class="btn btn-primary btn-sm">Know Your FQ Score</a>
+          <a href="http://login.finowise.in" class="btn btn-outline-dark btn-sm" target="_blank" rel="noopener">Login</a>
+        </div>
+      </div>
+      <div class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb"><a href="../index.html">Home</a> / <span>Know Your FQ Score</span></div>
+      <h1>Know Your FQ Score</h1>
+      <p class="subtitle">Your Financial Quotient — a 2-minute check-up of your money habits</p>
+    </div>
+  </section>
+
+  <section class="section bg-light">
+    <div class="container">
+      <div class="fq-wrap">
+        <div class="fq-card" data-testid="fq-card">
+
+          <div class="fq-step is-active" id="fqIntro" data-testid="fq-intro">
+            <span class="fq-kicker">Financial Quotient Test</span>
+            <h2>How financially wise are you today?</h2>
+            <p class="lead">Answer 10 quick questions across the five pillars of financial freedom. You will get your FQ score out of 100, a pillar-wise breakdown and next steps from the Finowise team.</p>
+            <div class="fq-pillars">
+              <div class="fq-pillar"><i class="fa-solid fa-wallet"></i>Earning</div>
+              <div class="fq-pillar"><i class="fa-solid fa-piggy-bank"></i>Saving</div>
+              <div class="fq-pillar"><i class="fa-solid fa-chart-line"></i>Investing</div>
+              <div class="fq-pillar"><i class="fa-solid fa-shield-halved"></i>Protection</div>
+              <div class="fq-pillar"><i class="fa-solid fa-route"></i>Planning</div>
+            </div>
+            <form id="fqLeadForm" class="contact-form" novalidate>
+              <div class="form-row">
+                <div class="form-group"><label for="fqName">Full Name *</label><input type="text" id="fqName" name="name" required data-testid="fq-name-input" /></div>
+                <div class="form-group"><label for="fqPhone">Mobile *</label><input type="tel" id="fqPhone" name="phone" required data-testid="fq-phone-input" /></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label for="fqEmail">Email</label><input type="email" id="fqEmail" name="email" data-testid="fq-email-input" /></div>
+                <div class="form-group"><label for="fqCity">City</label><input type="text" id="fqCity" name="city" data-testid="fq-city-input" /></div>
+              </div>
+              <button type="submit" class="btn btn-primary" data-testid="fq-start-btn">Start the FQ Test <i class="fa-solid fa-arrow-right"></i></button>
+            </form>
+          </div>
+
+          <div class="fq-step" id="fqQuiz" data-testid="fq-quiz">
+            <div class="fq-meta"><span id="fqPillarLabel" data-testid="fq-pillar-label">Earning</span><span id="fqCounter" data-testid="fq-counter">Question 1 of 10</span></div>
+            <div class="fq-progress"><span id="fqProgress"></span></div>
+            <h3 class="fq-q" id="fqQuestion" data-testid="fq-question"></h3>
+            <div class="fq-options" id="fqOptions"></div>
+            <div class="fq-nav">
+              <button type="button" class="btn btn-outline-dark btn-sm" id="fqBack" data-testid="fq-back-btn"><i class="fa-solid fa-arrow-left"></i> Back</button>
+              <button type="button" class="btn btn-primary btn-sm" id="fqNext" data-testid="fq-next-btn" disabled>Next <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+          </div>
+
+          <div class="fq-step" id="fqResult" data-testid="fq-result">
+            <div id="fqSaveMsg"></div>
+            <div class="fq-result-head">
+              <div class="fq-ring">
+                <svg width="170" height="170" viewBox="0 0 170 170">
+                  <circle cx="85" cy="85" r="74" fill="none" stroke="#E6F2F2" stroke-width="14" />
+                  <circle id="fqRingArc" cx="85" cy="85" r="74" fill="none" stroke="#C63204" stroke-width="14" stroke-linecap="round" stroke-dasharray="465" stroke-dashoffset="465" style="transition:stroke-dashoffset 1.2s ease" />
+                </svg>
+                <div class="fq-ring-val"><div><strong id="fqScore" data-testid="fq-score">0</strong><small>out of 100</small></div></div>
+              </div>
+              <div style="flex:1;min-width:240px">
+                <span class="fq-band" id="fqBand" data-testid="fq-band"></span>
+                <h2 id="fqHeadline"></h2>
+                <p id="fqSummary" class="text-muted" style="color:var(--text-light)"></p>
+              </div>
+            </div>
+            <div class="fq-bars" id="fqBars" data-testid="fq-pillar-bars"></div>
+            <div class="fq-tips"><h4>Your next steps</h4><ul id="fqTips" data-testid="fq-tips"></ul></div>
+            <div class="fq-actions">
+              <a href="contact.html" class="btn btn-primary" data-testid="fq-consult-btn">Talk to a Finowise Expert</a>
+              <a href="https://wa.me/919137654191" class="btn btn-outline-dark" target="_blank" rel="noopener" data-testid="fq-whatsapp-btn"><i class="fa-brands fa-whatsapp"></i> Send Report on WhatsApp</a>
+              <button type="button" class="btn btn-outline-dark" id="fqRetake" data-testid="fq-retake-btn">Retake Test</button>
+            </div>
+            <p class="calc-disclaimer" style="margin-top:22px;font-size:.82rem;color:var(--text-light)">The FQ score is an indicative self-assessment for educational purposes and is not investment advice. Mutual fund investments are subject to market risks, read all scheme related documents carefully.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid footer-grid-4">
+        <div class="footer-brand">
+          <div class="footer-logo-box">
+            <img src="../images/logo.png" alt="Finowise" class="footer-logo-img" />
+          </div>
+          <p>Finowise Freedom LLP is a part of Freedom LifeX Group. We provide incidental advice to assist you in selecting mutual fund &amp; SIF schemes suitable for your goal-based investments, helping you work towards your financial objectives.</p>
+          <div class="footer-social">
+            <a href="https://wa.me/919137654191" aria-label="WhatsApp" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i></a>
+            <a href="mailto:connect@finowise.in" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+            <a href="http://login.finowise.in" aria-label="Client Login" target="_blank" rel="noopener"><i class="fa-solid fa-right-to-bracket"></i></a>
+          </div>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <div class="footer-links">
+            <a href="../index.html#who-we-are">Who We Are</a>
+            <a href="team.html">Our Team</a>
+            <a href="culture-charter.html">Culture Charter</a>
+            <a href="solutions.html">Our Solutions</a>
+            <a href="services.html">Our Services</a>
+            <a href="calculators.html">Calculators</a>
+            <a href="contact.html">Contact Us</a>
+            <a href="career.html">Careers</a>
+          </div>
+        </div>
+        <div>
+          <h4>Investor Zone</h4>
+          <div class="footer-links">
+            <a href="investor-resources.html">Investor Resources</a>
+            <a href="disclosure.html">Disclosure</a>
+            <a href="grievance-redressal.html">Grievance Redressal</a>
+            <a href="faqs.html">FAQs</a>
+            <a href="important-links.html">Important Links</a>
+            <a href="http://login.finowise.in" target="_blank" rel="noopener">Client Login</a>
+          </div>
+        </div>
+        <div>
+          <h4>Get In Touch</h4>
+          <div class="footer-contact">
+            <div class="contact-item"><span class="icon"><i class="fa-solid fa-phone"></i></span> +91 91376 54191</div>
+            <div class="contact-item"><span class="icon"><i class="fa-solid fa-envelope"></i></span> connect@finowise.in</div>
+            <div class="contact-item"><span class="icon"><i class="fa-solid fa-headset"></i></span> <span class="griev-block">Grievance Officer<br /><a href="mailto:Praveen@Finowise.in">Praveen@Finowise.in</a><br />95659 08070</span></div>
+            <div class="contact-item"><span class="icon"><i class="fa-solid fa-location-dot"></i></span> Mumbai · Pune · Bengaluru · Varanasi · Katni</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-risk">
+        <p class="risk-headline">Mutual Fund investments are subject to market risks, read all scheme related documents carefully.</p>
+        <p class="risk-body"><strong>Risk Factors</strong> — Mutual Fund Schemes do not assure or guarantee any returns. Past performances of any Mutual Fund Scheme may or may not be sustained in future. There is no guarantee that the investment objective of any suggested scheme shall be achieved. Please read the Scheme Information Document (SID) and Key Information Memorandum (KIM) before investing. Investors should check and evaluate the Exit loads and other cost structure (TER) applicable at the time of making the investment before finalizing on any investment decision for Mutual Funds schemes. We deal in Regular Plans only for Mutual Fund Schemes and earn a Trailing Commission on client investments. Disclosure for Commission earnings is made to clients at the time of investments. Option of Direct Plan for every Mutual Fund Scheme is available to investors offering advantage of lower expense ratio. We are not entitled to earn any commission on Direct plans. Hence we do not deal in Direct Plans.</p>
+      </div>
+
+      <div class="footer-compliance">
+        <p class="arn-info">Finowise Freedom LLP · AMFI Registered Mutual Fund and SIF Distributor · <strong>ARN-263895</strong> · Date of initial registration — 11 Jul 2022 · Current validity of ARN — 08 Feb 2029 · Customer Care: 91376 54191 · connect@finowise.in</p>
+        <p class="amfi-tagline"><span>#MutualFundsSahiHai</span></p>
+        <p class="grievance-line">For any grievance, contact our Grievance Officer: <a href="mailto:Praveen@Finowise.in">Praveen@Finowise.in</a> · <strong>95659 08070</strong> · <a href="grievance-redressal.html">Grievance Redressal</a></p>
+        <div class="compliance-links">
+          <a href="disclaimer.html">Disclaimer</a>
+          <a href="disclosure.html">Disclosure</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="amfi-risk-factors.html">AMFI Risk Factors</a>
+          <a href="https://www.sebi.gov.in/filings/mutual-funds.html" target="_blank" rel="noopener">SID/SAI/KIM</a>
+          <a href="https://www.amfiindia.com/investor-corner/online-center/code-of-conduct-for-distributors" target="_blank" rel="noopener">Code of Conduct</a>
+          <a href="https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&amp;sid=1&amp;ssid=7&amp;smid=0" target="_blank" rel="noopener">SEBI Circulars</a>
+          <a href="investor-resources.html">Investor Resources</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>® 2026 Finowise Freedom LLP. All Rights Reserved. Finowise Freedom LLP is a part of Freedom LifeX Group.</span>
+        <span>
+          <a href="disclaimer.html">Disclaimer</a> ·
+          <a href="privacy.html">Privacy</a> ·
+          <a href="disclosure.html">Disclosure</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/919137654191" class="wa-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+  <script src="../js/main.prod.js"></script>
+  <script src="../js/fq-test.js"></script>
+</body>
+</html>

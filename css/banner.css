@@ -1,0 +1,997 @@
+/* ============================================
+   BANNER SLIDER — cinematic / professional
+   ============================================ */
+.banner-slider {
+  position: relative;
+  width: 100%;
+  height: clamp(520px, 72vh, 680px);
+  overflow: hidden;
+  background: var(--secondary);
+  isolation: isolate;
+}
+
+.banner-slides {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Crossfade + subtle scale / pan */
+.banner-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 1;
+  pointer-events: none;
+  transition:
+    opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 1s,
+    transform 1.15s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: scale(1.04);
+  will-change: opacity, transform;
+}
+
+.banner-slide.active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 2;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.banner-slide.is-leaving {
+  opacity: 0;
+  visibility: visible;
+  z-index: 2;
+  transform: scale(0.98) translateX(-18px);
+}
+
+.banner-slide.from-next {
+  transform: scale(1.06) translateX(28px);
+}
+.banner-slide.from-prev {
+  transform: scale(1.06) translateX(-28px);
+}
+.banner-slide.active.from-next,
+.banner-slide.active.from-prev {
+  transform: scale(1) translateX(0);
+}
+
+.banner-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+
+/* Animated gradient orbs */
+.banner-bg-1 {
+  background: linear-gradient(135deg, #001a20 0%, #002830 28%, #0A4A54 62%, #002830 100%);
+}
+.banner-bg-2 {
+  background: linear-gradient(145deg, #0A4A54 0%, #001a20 38%, #003540 72%, #0A4A54 100%);
+}
+.banner-bg-3 {
+  background: linear-gradient(125deg, #003540 0%, #0A4A54 32%, #001a20 68%, #003540 100%);
+}
+
+.banner-bg::before,
+.banner-bg::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.9;
+  will-change: transform;
+}
+
+.banner-bg-1::before,
+.banner-bg-2::before,
+.banner-bg-3::before {
+  top: -35%;
+  right: -12%;
+  width: min(620px, 70vw);
+  height: min(620px, 70vw);
+  background: radial-gradient(circle, rgba(198, 50, 4, 0.28) 0%, transparent 68%);
+  animation: orbFloatA 14s ease-in-out infinite;
+}
+
+.banner-bg-1::after,
+.banner-bg-2::after,
+.banner-bg-3::after {
+  bottom: -40%;
+  left: -15%;
+  width: min(560px, 65vw);
+  height: min(560px, 65vw);
+  background: radial-gradient(circle, rgba(240, 122, 42, 0.18) 0%, transparent 70%);
+  animation: orbFloatB 18s ease-in-out infinite;
+}
+
+.banner-bg-2::before {
+  background: radial-gradient(circle, rgba(10, 74, 84, 0.45) 0%, rgba(198, 50, 4, 0.2) 40%, transparent 70%);
+}
+
+/* Ken Burns on photo layer */
+.banner-img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 62%;
+  height: 100%;
+  z-index: 1;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.28;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.25) 22%, rgba(0,0,0,0.75) 52%, rgba(0,0,0,1) 78%);
+  mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.25) 22%, rgba(0,0,0,0.75) 52%, rgba(0,0,0,1) 78%);
+  transform: scale(1.08);
+  transition: opacity 1s ease, transform 0.3s ease;
+}
+
+.banner-slide.active .banner-img {
+  opacity: 0.32;
+  animation: kenBurns 7.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  background:
+    linear-gradient(105deg, rgba(0, 26, 32, 0.88) 0%, rgba(0, 40, 48, 0.72) 42%, rgba(0, 40, 48, 0.35) 72%, rgba(0, 40, 48, 0.45) 100%);
+  pointer-events: none;
+}
+
+/* Soft light sweep on active slide */
+.banner-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.06) 48%,
+    transparent 62%
+  );
+  transform: translateX(-120%);
+  opacity: 0;
+}
+
+.banner-slide.active .banner-overlay::after {
+  animation: lightSweep 1.6s 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.banner-content {
+  position: relative;
+  z-index: 5;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-bottom: 88px;
+  box-sizing: border-box;
+}
+
+/* Staggered content entrance */
+.banner-text .journey-label,
+.banner-text h1,
+.banner-text > p,
+.banner-text .banner-hero-btns {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.banner-slide.active .banner-text .journey-label {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.18s;
+}
+.banner-slide.active .banner-text h1 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.32s;
+}
+.banner-slide.active .banner-text > p {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.48s;
+}
+.banner-slide.active .banner-text .banner-hero-btns {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.62s;
+}
+
+.banner-text h1 {
+  color: #fff;
+  text-shadow: 0 4px 28px rgba(0, 0, 0, 0.35);
+  letter-spacing: -0.02em;
+}
+
+/*
+  Brand word shimmer — same technique as sainikdhanrakshak.com .hc-em
+  (gradient + background-clip:text + infinite background-position)
+  IMPORTANT: do NOT use filter on this element — it breaks clip in WebKit
+*/
+.banner-text .text-primary,
+.banner-text h1 .text-primary {
+  display: inline-block;
+  position: relative;
+  font-style: italic;
+  font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
+  font-weight: 700;
+  /* Exact pattern as sainikdhanrakshak.com .hc-em (disciplined word) */
+  background: linear-gradient(
+    110deg,
+    #FFE0C8 0%,
+    #FF8A4C 22%,
+    #C63204 42%,
+    #FF6B2C 58%,
+    #E85A2A 72%,
+    #FFE0C8 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: brandShimmer 3.5s linear infinite;
+  will-change: background-position;
+}
+
+@keyframes brandShimmer {
+  to { background-position: 200% center; }
+}
+.banner-text > p {
+  color: rgba(255, 255, 255, 0.88);
+  max-width: 560px;
+  font-size: clamp(0.95rem, 1.5vw, 1.08rem);
+  line-height: 1.7;
+}
+
+.banner-hero-btns .btn {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+.banner-hero-btns .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(198, 50, 4, 0.28);
+}
+.banner-hero-btns .btn-outline-white {
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  color: #fff;
+}
+.banner-hero-btns .btn-outline-white:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: #fff;
+  color: #fff;
+}
+
+/* Journey badge pulse */
+.journey-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  background: rgba(198, 50, 4, 0.18);
+  border: 1px solid rgba(255, 176, 128, 0.35);
+  color: #FFB38A;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  box-shadow: 0 0 0 0 rgba(198, 50, 4, 0.25);
+}
+.banner-slide.active .journey-label {
+  animation: badgePulse 2.8s ease-in-out 0.8s infinite;
+}
+
+@keyframes kenBurns {
+  0% { transform: scale(1.12) translate3d(2%, 0, 0); }
+  100% { transform: scale(1.02) translate3d(-1%, -1%, 0); }
+}
+@keyframes orbFloatA {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-4%, 6%, 0) scale(1.08); }
+}
+@keyframes orbFloatB {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(6%, -5%, 0) scale(1.06); }
+}
+@keyframes lightSweep {
+  0% { transform: translateX(-120%); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateX(120%); opacity: 0; }
+}
+@keyframes badgePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(198, 50, 4, 0.28); }
+  50% { box-shadow: 0 0 0 10px rgba(198, 50, 4, 0); }
+}
+@keyframes progressFill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* Autoplay progress bar */
+.banner-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 52px;
+  height: 3px;
+  z-index: 22;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  pointer-events: none;
+}
+.banner-progress-bar {
+  display: block;
+  height: 100%;
+  width: 100%;
+  transform-origin: left center;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, #C63204, #F07A2A, #FFB38A);
+  box-shadow: 0 0 12px rgba(198, 50, 4, 0.55);
+}
+.banner-progress-bar.is-running {
+  animation: progressFill 3s linear forwards;
+}
+
+/* ============================================
+   SLIDE 1: Hero Layout (Two-Column with Stats)
+   ============================================ */
+.banner-hero-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: center;
+  width: 100%;
+}
+
+.banner-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(198, 50, 4, 0.2);
+  color: var(--accent);
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  border: 1px solid rgba(198, 50, 4, 0.3);
+}
+
+.banner-badge .dot {
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+  animation: pulse-dot 2s ease infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.banner-hero-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.25;
+  margin-bottom: 14px;
+}
+
+.banner-hero-headline span {
+  color: var(--primary);
+}
+
+.banner-hero-sub {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 22px;
+}
+
+.banner-hero-btns {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.btn-outline-light {
+  color: #fff;
+  border: 2px solid rgba(255,255,255,0.4);
+  background: transparent;
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-outline-light:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: #fff;
+  color: #fff;
+}
+
+.banner-hero-trust {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.banner-hero-trust span {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.6);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.banner-hero-trust span i {
+  color: var(--success);
+  font-size: 0.75rem;
+}
+
+/* Stats Card inside Slide 1 */
+.banner-stats-card {
+  background: rgba(255,255,255,0.97);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.banner-stats-card h3 {
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--secondary);
+  margin-bottom: 24px;
+  letter-spacing: 1px;
+}
+
+.banner-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.banner-stat-item {
+  text-align: center;
+  padding: 18px 12px;
+  background: var(--bg-cream);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.banner-stat-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  border-color: var(--primary);
+}
+
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+/* ============================================
+   SLIDES 2 & 3: Standard Text Layout
+   ============================================ */
+.banner-text {
+  max-width: 700px;
+}
+
+.banner-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 30px rgba(198, 50, 4, 0.3);
+}
+
+.banner-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 18px;
+}
+
+.banner-headline span {
+  color: var(--accent);
+}
+
+.banner-sub {
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.7;
+  margin-bottom: 24px;
+  max-width: 580px;
+}
+
+.banner-tags {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.banner-tags span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.banner-tags span i {
+  color: var(--accent);
+}
+
+/* ============================================
+   SLIDER CONTROLS
+   ============================================ */
+.banner-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 24;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #fff;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2);
+  padding: 0;
+}
+
+.banner-nav:hover {
+  background: rgba(198, 50, 4, 0.88);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-50%) scale(1.08);
+  box-shadow: 0 10px 32px rgba(198, 50, 4, 0.35);
+}
+
+.banner-nav:active {
+  transform: translateY(-50%) scale(0.96);
+}
+
+.banner-prev { left: 22px; }
+.banner-next { right: 22px; }
+
+/* Dots — above tagline + progress */
+.banner-dots {
+  position: absolute;
+  bottom: 68px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 24;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
+  pointer-events: auto;
+  background: rgba(0, 20, 24, 0.28);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.banner-dot {
+  width: 10px;
+  height: 10px;
+  min-width: 10px;
+  min-height: 10px;
+  padding: 0;
+  margin: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  box-shadow: none;
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+}
+
+.banner-dot.active {
+  width: 28px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #C63204, #F07A2A);
+  border-color: rgba(255, 255, 255, 0.85);
+  transform: scale(1);
+  box-shadow: 0 0 0 3px rgba(198, 50, 4, 0.28), 0 4px 14px rgba(198, 50, 4, 0.35);
+}
+
+.banner-dot:hover {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: #fff;
+}
+.banner-dot.active:hover {
+  background: linear-gradient(90deg, #C63204, #F07A2A);
+}
+
+/* Bottom Tagline Bar — brand orange/red strip */
+.banner-tagline-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 15;
+  background: linear-gradient(
+    90deg,
+    #A02803 0%,
+    #C63204 28%,
+    #E85A2A 52%,
+    #C63204 76%,
+    #A02803 100%
+  );
+  border-top: 1px solid rgba(255, 220, 190, 0.35);
+  box-shadow: 0 -6px 24px rgba(160, 40, 3, 0.35);
+  backdrop-filter: blur(4px);
+  padding: 0;
+  text-align: center;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Do NOT style .tagline-sep here — old rule made >> tiny/italic */
+.banner-tagline-bar i {
+  color: var(--accent);
+  margin-right: 8px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+  .banner-slider { height: 550px; }
+  .banner-hero-layout { gap: 30px; }
+  .banner-hero-headline { font-size: 1.8rem; }
+  .banner-stats-card { padding: 24px; }
+  .stat-num { font-size: 1.5rem; }
+  .banner-nav { width: 42px; height: 42px; }
+  .banner-prev { left: 16px; }
+  .banner-next { right: 16px; }
+}
+
+@media (max-width: 768px) {
+  .banner-slider { height: 620px; }
+  .banner-hero-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .banner-hero-right { display: none; }
+  .banner-hero-headline { font-size: 1.6rem; }
+  .banner-hero-sub { font-size: 0.88rem; }
+  .banner-hero-btns .btn { font-size: 0.85rem; padding: 10px 20px; }
+  .banner-icon { width: 50px; height: 50px; font-size: 1.2rem; margin-bottom: 18px; }
+  .banner-headline { font-size: 1.8rem; }
+  .banner-sub { font-size: 0.92rem; }
+  .banner-nav { width: 38px; height: 38px; font-size: 0.85rem; }
+  .banner-prev { left: 10px; }
+  .banner-next { right: 10px; }
+  .banner-dots { bottom: 56px; }
+  .banner-tags span { font-size: 0.78rem; padding: 6px 14px; }
+}
+
+@media (max-width: 480px) {
+  .banner-slider { height: 520px; }
+  .banner-hero-headline { font-size: 1.4rem; }
+  .banner-hero-btns { flex-direction: column; }
+  .banner-hero-trust { gap: 10px; }
+  .banner-headline { font-size: 1.5rem; }
+  .banner-sub { font-size: 0.85rem; margin-bottom: 16px; }
+  .banner-tags { gap: 8px; }
+  .banner-tags span { font-size: 0.72rem; padding: 5px 10px; }
+  .banner-nav { display: none; }
+}
+
+.banner-tagline-bar .tagline-text {
+  text-align: center;
+  color: #fff;
+  font-family: var(--font, Inter, system-ui, sans-serif);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  font-size: clamp(0.95rem, 2.4vw, 1.15rem);
+  margin: 0;
+  padding: 14px 16px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0 2px;
+  line-height: 1.35;
+  text-transform: none;
+  font-style: normal;
+}
+
+/*
+  >> separators on orange strip — white/cream for contrast (not orange-on-orange)
+*/
+.banner-tagline-bar .tagline-sep,
+.banner-tagline-bar .tagline-dot,
+.banner-tagline-bar .tagline-text .accent {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: auto !important;
+  min-width: 2em;
+  height: auto !important;
+  min-height: 1.45em;
+  margin: 0 0.55em !important;
+  padding: 0.1em 0.5em !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  background-image: none !important;
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+  font-family: var(--font, Inter, system-ui, sans-serif) !important;
+  font-size: 1.15em !important;
+  font-weight: 900 !important;
+  font-style: normal !important;
+  line-height: 1 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: none !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  vertical-align: middle;
+  flex-shrink: 0;
+  overflow: visible;
+  transform-origin: center;
+  animation: taglineSepPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes taglineSepPulse {
+  0%, 100% {
+    transform: scale(1);
+    background: rgba(255, 255, 255, 0.16) !important;
+    box-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.18),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+  50% {
+    transform: scale(1.08);
+    background: rgba(255, 255, 255, 0.28) !important;
+    box-shadow:
+      0 0 0 3px rgba(255, 255, 255, 0.2),
+      0 4px 14px rgba(0, 0, 0, 0.22),
+      inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  }
+}
+
+@media (max-width: 480px) {
+  .banner-dots { bottom: 54px; gap: 6px; padding: 6px 10px; }
+  .banner-dot { width: 8px; height: 8px; min-width: 8px; min-height: 8px; }
+  .banner-dot.active { width: 22px; }
+  .banner-progress { bottom: 42px; }
+  .banner-tagline-bar {
+    min-height: 48px;
+  }
+  .banner-tagline-bar .tagline-text {
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    padding: 11px 10px;
+  }
+  .banner-tagline-bar .tagline-sep {
+    margin: 0 0.35em !important;
+    min-width: 1.85em;
+    padding: 0.1em 0.4em !important;
+    font-size: 0.95em !important;
+    letter-spacing: 0.1em !important;
+  }
+}
+
+/* Accessibility: reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .banner-slide,
+  .banner-text .journey-label,
+  .banner-text h1,
+  .banner-text > p,
+  .banner-text .banner-hero-btns,
+  .banner-img,
+  .banner-bg::before,
+  .banner-bg::after,
+  .banner-overlay::after,
+  .banner-progress-bar,
+  .journey-label,
+  .banner-text .text-primary,
+  .banner-text h1 .text-primary,
+  .banner-tagline-bar .tagline-sep {
+    animation: none !important;
+    transition: opacity 0.35s ease !important;
+  }
+  .banner-tagline-bar .tagline-sep {
+    transform: none !important;
+  }
+  .banner-slide {
+    transform: none !important;
+  }
+  .banner-text .text-primary,
+  .banner-text h1 .text-primary {
+    background: linear-gradient(110deg, #FF8A4C, #C63204);
+    background-size: 100% auto;
+  }
+  .banner-slide.active .banner-text .journey-label,
+  .banner-slide.active .banner-text h1,
+  .banner-slide.active .banner-text > p,
+  .banner-slide.active .banner-text .banner-hero-btns {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0s;
+  }
+}
+
+/* ===== Welcome slide — lighthouse photo hero ===== */
+.welcome-slide { background: linear-gradient(120deg, #12070a 0%, #2a0f0d 45%, #4a1a12 100%); }
+.welcome-scene {
+  position: absolute; top: 0; right: 0; bottom: 0; z-index: 0;
+  width: 68%;
+  background-size: cover; background-position: center 52%;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 30%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 30%);
+}
+.banner-slide.welcome-slide.active .welcome-scene { animation: kenBurns 9s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.welcome-slide::before {
+  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(90deg, rgba(10, 5, 8, 0.85) 0%, rgba(10, 5, 8, 0.55) 38%, rgba(10, 5, 8, 0) 62%);
+}
+.welcome-slide .banner-content { z-index: 3; }
+.welcome-text h1 { color: #fff; }
+.welcome-text h1 .text-primary { color: #ff9a4d; text-shadow: 0 2px 14px rgba(0, 0, 0, 0.35); }
+.welcome-text > p { color: rgba(255, 255, 255, 0.92); }
+.welcome-text .btn-outline { color: #fff; border-color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.08); }
+.welcome-text .btn-outline:hover { background: #fff; color: #0b2f45; }
+@media (max-width: 900px) {
+  .welcome-scene { width: 100%; background-position: 58% 55%; -webkit-mask-image: none; mask-image: none; }
+  .welcome-slide::before { background: linear-gradient(180deg, rgba(10, 5, 8, 0.82) 0%, rgba(10, 5, 8, 0.62) 55%, rgba(10, 5, 8, 0.35) 100%); }
+}
+
+
+/* ===== Scroll performance =====
+   Pause every looping banner effect once the banner is off-screen (class set by site-enhance.js),
+   so nothing repaints while the visitor scrolls the rest of the page. */
+.banner-slider.is-offscreen *,
+.banner-slider.is-offscreen *::before,
+.banner-slider.is-offscreen *::after { animation-play-state: paused !important; }
+/* The pulsing "Journey" badge animated box-shadow (a full repaint every frame) — run it a few times, then rest. */
+.banner-slide.active .journey-label { animation-iteration-count: 3; }
+
+/* ===== Brighter hero photos (slides 1–3) =====
+   Photos were at ~30% opacity under an 88% dark overlay — too dim. Show them much brighter and
+   keep the dark shade only on the left, behind the headline, so the text stays readable. */
+.banner-img { opacity: 0.75; }
+.banner-slide.active .banner-img { opacity: 0.9; }
+.banner-overlay {
+  background: linear-gradient(100deg, rgba(0, 26, 32, 0.82) 0%, rgba(0, 40, 48, 0.55) 38%, rgba(0, 40, 48, 0.12) 68%, rgba(0, 40, 48, 0.08) 100%);
+}
+/* Welcome slide: lighter shade too */
+.welcome-slide::before {
+  background: linear-gradient(90deg, rgba(10, 5, 8, 0.72) 0%, rgba(10, 5, 8, 0.4) 38%, rgba(10, 5, 8, 0) 60%);
+}
+@media (max-width: 900px) {
+  .banner-overlay { background: linear-gradient(180deg, rgba(0, 26, 32, 0.78) 0%, rgba(0, 40, 48, 0.6) 60%, rgba(0, 40, 48, 0.4) 100%); }
+  .welcome-slide::before { background: linear-gradient(180deg, rgba(10, 5, 8, 0.72) 0%, rgba(10, 5, 8, 0.5) 55%, rgba(10, 5, 8, 0.25) 100%); }
+}
+@media (min-width: 901px) { .banner-text > p { max-width: 660px; } }
+
+/* ===== Welcome slide — lighter scene, lighthouse light falling on the heading (meeting 26 Oct) ===== */
+.welcome-slide::before {
+  background: linear-gradient(90deg, rgba(10, 5, 8, 0.5) 0%, rgba(10, 5, 8, 0.22) 40%, rgba(10, 5, 8, 0) 62%);
+}
+/* Beam from the lighthouse lamp across to the headline, ending in a soft pool of light behind it */
+.welcome-beam {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background:
+    radial-gradient(ellipse 34% 30% at 24% 46%, rgba(255, 238, 200, 0.42) 0%, rgba(255, 226, 170, 0.18) 45%, transparent 75%),
+    linear-gradient(270deg, rgba(255, 240, 205, 0.55) 0%, rgba(255, 232, 185, 0.28) 30%, rgba(255, 226, 170, 0.1) 100%);
+  -webkit-clip-path: polygon(70% 24%, 70% 27%, 0% 75%, 0% 14%);
+  clip-path: polygon(70% 24%, 70% 27%, 0% 75%, 0% 14%);
+  mix-blend-mode: screen;
+}
+.welcome-text h1 { font-size: clamp(2.6rem, 5.2vw, 4.4rem); text-shadow: 0 2px 18px rgba(20, 8, 4, 0.55); }
+.welcome-text h1 .text-primary { color: #ff8f3f; text-shadow: 0 2px 16px rgba(20, 8, 4, 0.6); }
+.welcome-text > p { text-shadow: 0 1px 10px rgba(20, 8, 4, 0.6); }
+@media (max-width: 900px) {
+  .welcome-slide::before { background: linear-gradient(180deg, rgba(10, 5, 8, 0.6) 0%, rgba(10, 5, 8, 0.38) 55%, rgba(10, 5, 8, 0.15) 100%); }
+  .welcome-beam { -webkit-clip-path: polygon(62% 30%, 62% 34%, 0% 70%, 0% 20%); clip-path: polygon(62% 30%, 62% 34%, 0% 70%, 0% 20%); }
+}
+.welcome-beam { filter: blur(8px); }
+
+/* ===== New lighthouse photo (27 Oct): full-width scene; its own beam lights the heading ===== */
+.welcome-slide { background: #0b2238; }
+.welcome-scene {
+  width: 100% !important; left: 0; right: 0;
+  -webkit-mask-image: none !important; mask-image: none !important;
+  background-position: 72% 40% !important;
+}
+.welcome-slide::before {
+  background: linear-gradient(90deg, rgba(5, 18, 32, 0.55) 0%, rgba(5, 18, 32, 0.25) 38%, rgba(5, 18, 32, 0) 60%) !important;
+}
+.welcome-text h1 { text-shadow: 0 2px 18px rgba(2, 10, 20, 0.6); }
+.welcome-text h1 .text-primary { text-shadow: 0 2px 16px rgba(2, 10, 20, 0.65); }
+@media (max-width: 900px) {
+  .welcome-scene { background-position: 78% 45% !important; }
+  .welcome-slide::before { background: linear-gradient(180deg, rgba(5, 18, 32, 0.62) 0%, rgba(5, 18, 32, 0.4) 55%, rgba(5, 18, 32, 0.2) 100%) !important; }
+}
+
+/* Welcome slide: heading block sits further left (28 Oct) */
+@media (min-width: 901px) {
+  .welcome-slide .banner-content .container { max-width: none; padding-left: clamp(28px, 4vw, 64px); }
+}
+/* slider arrows moved to the bottom corners so they never cover the heading */
+@media (min-width: 901px) {
+  .banner-nav { top: auto !important; bottom: 96px !important; transform: none !important; }
+  .banner-nav:active { transform: scale(0.96) !important; }
+}
+
+/* Lighthouse photo also set here, so it shows even where inline styles are blocked */
+.welcome-scene { background-image: url('../images/banner/lighthouse.jpg'); }

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f28a2e"/>
+      <stop offset="0.16" stop-color="#f8b25e"/>
+      <stop offset="0.38" stop-color="#fde3bf"/>
+      <stop offset="0.62" stop-color="#fdf3e4"/>
+      <stop offset="0.82" stop-color="#d9e9f1"/>
+      <stop offset="1" stop-color="#a9cde0"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fff4dc" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#fff4dc" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="haze" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.55"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#sky)"/>
+  <circle cx="1180" cy="210" r="260" fill="url(#sun)"/>
+  <!-- far mountains -->
+  <path d="M0 760 L120 700 L230 735 L360 660 L470 710 L600 640 L720 700 L840 630 L980 705 L1100 650 L1230 715 L1360 655 L1480 710 L1600 670 V1000 H0Z" fill="#b7d3e3" opacity="0.85"/>
+  <!-- mid mountains -->
+  <path d="M0 830 L140 760 L260 800 L400 730 L540 805 L680 745 L820 815 L960 750 L1100 820 L1250 755 L1400 815 L1600 760 V1000 H0Z" fill="#8fb6cd" opacity="0.9"/>
+  <rect y="700" width="1600" height="160" fill="url(#haze)"/>
+  <!-- near mountains -->
+  <path d="M0 910 L170 840 L320 890 L480 830 L640 900 L800 845 L960 905 L1120 850 L1280 910 L1440 860 L1600 900 V1000 H0Z" fill="#6f9cb8"/>
+  <path d="M0 960 L200 915 L420 950 L640 910 L860 955 L1080 915 L1300 955 L1600 920 V1000 H0Z" fill="#557f9c"/>
+</svg>
