@@ -1,0 +1,264 @@
+FINOWISE WEBSITE — CORRECTIONS FROM MANISH SIR'S MEETING (26 Oct 2026) AND HANDWRITTEN NOTES
+Prepared 27 Oct 2026. Base version: finowise-website-updated-17. Not deployed — upload to Vercel when approved.
+
+Design: unchanged. Same colours, fonts, logo, layouts, cards, animations. Only the items below changed.
+Note: the site is plain HTML/CSS/JS (no React), so edits were made directly in the page files.
+
+=====================================================================
+A. DONE
+=====================================================================
+
+1. NAMING (all pages)
+   - Group is now "Freedom LifeX Group" everywhere (was "Finowise Freedom LifeX Group" / "Finowise Freedom Group").
+   - Regulatory statements name the registered company, Finowise Freedom LLP:
+     * Footer: "Finowise Freedom LLP, a part of Freedom LifeX Group, is an AMFI Registered Mutual Fund and SIF Distributor…"
+     * Footer bottom line: "Finowise Freedom LLP is a part of Freedom LifeX Group."
+     * Who We Are intro: "Finowise Freedom LLP, a part of Freedom LifeX Group, is an AMFI Registered Mutual Fund and SIF Distributor (ARN-263895)…"
+     * Commission disclosure: "Finowise Freedom LLP provides investments in Regular plans…"
+   - No registration numbers, names or certifications were invented. ARN-263895 and validity 08 Feb 2029 unchanged.
+
+2. LANDING BANNER (index.html, css/banner.css)
+   - Heading: "Welcome To Freedom LifeX Group" (the word "Finowise" removed), made larger to use the freed space.
+   - Removed the upper "Be Wise >> Be WHealthy >> Be Happy" badge; the lower strip is kept.
+   - Removed "Schedule a Free Consultation"; only "Know Your FQ Score" remains.
+   - Lighthouse scene made lighter; a light beam now runs from the lighthouse lamp onto the heading.
+   - Other slides unchanged.
+
+3. ABOUT US / LEADERSHIP (about.html, team.html, css/enhance.css)
+   - CM replaced with ® after CERTIFIED FINANCIAL PLANNER (Swamy Sir, Praveen Sir, story paragraph).
+   - Swamy Sir: "He was part of…" -> "He is part of…"; "Swamy steers…" -> "Swamy Sir steers…".
+   - Shreedevi Ma'am: added co-founder line with Swamy Sir and the happiness line (meeting wording).
+   - Felix Sir: second sentence replaced — guidance of "P. Swamy Gowda"; "Passionate about helping people live a Happy and Freedom Life, he is part of the Freedom LifeX mission."
+   - Profile pop-up: shows the complete photo (shoulders visible); slightly smaller text.
+   - Removed "Meet Our Leadership Team" button.
+   - Removed the Vision & Mission block from Who We Are (vision/mission now only on Why We Do What We Do).
+   - Removed "In simple words: be wise enough in the financial ocean…" line.
+   - Homepage "Who We Are" card: "Our Story, Vision & Identity" -> "Our Story & Identity".
+   - Company story kept as it is until the new version is provided.
+   - "2000+ Happy Families" kept (approved in the meeting).
+
+4. CONSULTATION WORDING — compliance (32 pages)
+   - Removed the sentence under every closing banner ("Book/Schedule a free consultation", "Talk to our team for a free WHealth check discussion", etc.). Banners now show title + buttons only.
+   - Single Goal page: removed "Book a 15-minute introductory call" and "All Solutions" buttons.
+   - Our Team page heading "Let's initiate your financial consultation" -> "Let's begin your freedom journey".
+   - FAQ: "Contact us for a free consultation" -> "Contact us".
+   - Solutions pages: removed "Know Your FQ Score" from their closing banners (header button and landing page keep it).
+
+5. WHY WE DO WHAT WE DO (why-we-do.html)
+   - Mission and Vision keep the presentation wording (unchanged).
+   - Removed the paragraph and checklist below Mission & Vision.
+   - Added "Our Purpose" with its sentence ("We exist to replace chance with choice…") ABOVE Mission & Vision; the dark section is now titled "Our Mission & Vision".
+
+6. WHAT WE DO (what-we-do.html, index.html)
+   - Added a short "Transforming Lives" summary of the seven points above them; the seven points are unchanged.
+   - Homepage card line completed: "Transforming Income, Wealth & Life to Financial Freedom".
+
+7. SOLUTIONS / GOALS
+   - Removed "as per the Finowise website brief" (homepage and Solutions page); "Single Goal · Multiple Goals · Inspiring Goal" kept.
+   - "4-Bucket Architecture" replaced by "Golden Age Blueprint" — "Design your golden age with freedom cash-flow." (Solutions, Multiple Goals, homepage).
+   - "7 Events Plan" shown as "Comprehensive Freedom Blueprint (7 Events Plan)" — "Our Flagship Strategy — to ensure the availability of the right amount of money at the right time."
+   - 7 Events page sub-line: "Make Arrangements of Cash Flow at Every Stage of Life".
+   - Golden Age page sub-line: "Design Your Golden Age with Freedom Cash-Flow".
+   - Multiple Goals: sub-line "Design the Roadmap to Achieve Different Milestones of Your Life"; portfolio line removed.
+   - Inspiring Goal: text from "We ensure…" to the 7 Events Plan line replaced with "Live your life. Choose this goal to lead a financially free life — the life you are born to live and desire to live."
+   - Homepage: new "Our Multiple Goals Frameworks" section right after the goals (Family Need, Comprehensive Freedom Blueprint (7 Events Plan), Golden Age Blueprint).
+   - Solutions page "Also Available": removed the two repeated cards (Comprehensive and Golden Age now shown above).
+   - The 4-Bucket page itself still exists (not deleted), but is no longer listed.
+
+8. MENU AND FOOTER (45 pages)
+   - "Our Flagship Strategy" added to the Our Approach menu (opens the 7 Events Plan page).
+   - Footer city list: Katni moved to last.
+
+=====================================================================
+B. TESTING
+=====================================================================
+   - 45 pages checked on desktop (1366px) and phone (390px): no broken links, no script errors, no sideways scrolling.
+   - All HTML well-formed. Before/after screenshots compared: design unchanged apart from the items above.
+   - Disclosures, ARN, AMFI risk factors, grievance and investor information all still present.
+   - These edits do not by themselves make the site legally compliant; compliance review is separate.
+
+=====================================================================
+C. NEED CONFIRMATION (not changed yet)
+=====================================================================
+   1. Heading: transcript says "Welcome to Freedom Life is Growth" — treated as the transcription tool mishearing "Freedom LifeX Group". Confirm.
+   2. "Ravinder" CFP®: no Ravinder on the site — assumed Praveen Sir (already CFP®). Confirm.
+   3. Menu restructure (note p.8): remove "Our Team", "What Drives Us", "Our USP", "Our Products", "Resources"; add "Investor Zone". Which menu items exist after the change, and where do the product/resource pages go?
+   4. "Move starting contact to Investor tool, not in home page" (p.7) — which block?
+   5. "Remove bigger font in the band" (p.3) — the scrolling band under the banner? Remove it, or just make the text smaller?
+   6. "Remove the below part after ribbon" (p.3) — which ribbon/part?
+   7. "Six principles — points in paragraph" (p.3, Investment Philosophy) — turn the bullet points into paragraphs?
+   8. Single Goal (p.3): "calculator should come above the words", "blue and orange colour", "Calculate your goal — two buttons", "Disclaimer X" — the page has no calculator now; please clarify.
+   9. Multiple Goals: "Remove all three in mult" (p.4) — remove the three framework cards?
+  10. "Remove all the Our Services and below that — 2 boxes, 1 below other, and disclaimer" (p.6) — Our Services page or the "More Ways We Serve" section on Solutions?
+  11. "Our approach will be introductory call" / "replace those 3 single, multiple" (p.7) — meaning?
+  12. "More attractive of 7 Events" / "Copy the sentence and paste below 7" (p.5) — which sentence?
+  13. "Why choose Finowise" / "Client stories" order (p.7).
+  14. "…wealthx.com" (p.7) — which website address should appear, and where?
+  15. "Remove last logo title below it in box" (p.7) — footer logo box?
+  16. "Home login / Know your FQ score / Given in Resource add" (p.9).
+  17. Note p.2 "(7) -> upper" and "Roboto -> font".
+  18. Updated biographies from the corporate presentation, the new company story, and Manish Sir's text — waiting.
+  19. Mission wording "Level 1 to Level 8" and "Freedom Blueprints" (from a blurry screenshot) — confirm exact text.
+  20. "Mutual Funds Sahi Hai" note is crossed out — kept unchanged.
+
+=====================================================================
+D. FILES MODIFIED (50)
+=====================================================================
+   css/banner.css — welcome banner light/beam, heading size
+   css/enhance.css — profile pop-up photo/text
+   css/style.css — What We Do summary, Our Purpose spacing
+   index.html — banner, cards, goals text, frameworks section, naming, menu, footer
+   pages/about.html — naming, ®, profiles, removed button/line/vision-mission
+   pages/team.html — ®, profiles, heading
+   pages/why-we-do.html — purpose above mission & vision, removed paragraph
+   pages/what-we-do.html — summary, naming, banner sentence
+   pages/solutions.html, solutions-multiple.html, solutions-inspiring.html, solutions-7-events.html,
+   solutions-golden-age.html, solutions-single.html — goals/blueprint wording, FQ & 15-min call removal
+   pages/faqs.html, pages/disclosure.html — consultation wording, legal entity name
+   All other pages — group naming, footer legal line, menu item, closing-banner sentence
+
+=====================================================================
+E. SECOND ROUND (27 Oct, evening) — confirmed by you
+=====================================================================
+   - New lighthouse photo on the welcome banner (its own beam lights the heading); the drawn beam was removed.
+   - Removed the "From Returns To Risk Management" banner slide (banner now has 3 slides).
+   - Investment Philosophy: removed the Risk Management principle -> "Five Principles"; Exit and Rebalancing points written as paragraphs.
+   - Cards on every page: one card per row, full-line text, elegant style (accent edge, round icon badge, soft shadow, lift on hover).
+   - Band under the banner: smaller, regular-size text.
+   - Removed the in-page "Mutual fund investments are subject to market risks…" lines on 13 pages (the full disclosure stays in every footer; the Disclosure page commission note stays).
+   - Removed the "→ aligns with…" helper notes under Solutions cards.
+   - MENU (note p.8): Home · About Us (Who We Are, What We Do, Why We Do What We Do) · Our Approach (Investment Philosophy, Our Flagship Strategy, Our Solutions, Our Services) · Investor Zone (Investor Tools, Words of Wisdom, FAQs, Find Unclaimed Amount, Important Links, Investor Resources, Disclosure, Testimonials) · Contact.
+     Removed menus: Our USP, Our Products, Resources; removed items: Our Team, What Drives Us. These pages still open from the homepage, the Solutions page and the footer ("Our Team" added to the footer).
+   - Homepage: removed the closing "Start Your Freedom Journey" block (Investor Tools page keeps its own); "Why Choose" now comes after Client Stories.
+   - Multiple Goals: removed the remaining intro lines (with the portfolio line, all three intro lines are gone); the three framework cards stay.
+   - 7 Events Plan page: flagship sentence added below the seven events.
+   - Single Goal: "Calculate Your Goal" calculator placed above the text in teal-blue and orange, with two buttons (Calculate Your Goal, All Investor Tools); disclaimer removed.
+   - Our Services page: disclaimer removed; its two sections already stack one below the other.
+
+   STILL OPEN: "…wealthx.com" address; "Remove last logo title below it in box"; "Home login / Given in Resource add";
+   "(7) -> upper", "Roboto -> font"; "Our approach will be introductory call / replace those 3 single, multiple";
+   "Remove the below part after ribbon"; card sub-lines (kept the approved descriptions — tell me if they should go too);
+   updated biographies and company story from the corporate presentation.
+
+=====================================================================
+F. MULTIPLE / INSPIRING GOAL WORDING (27 Oct, from the notes p.4–5) — all pages
+=====================================================================
+   - Multiple Goals (homepage card, Solutions card, page sub-line, page description):
+     "Design the roadmap to achieve different milestones of your life."
+   - Inspiring Goal (homepage card, Solutions card, page text, page description):
+     "Live your life — choose this goal to lead a financially free life, the life you are born to live and desire to live."
+     Page sub-line: "Live Your Happy & Freedom Life".
+   - Homepage goals section title: "Design Your Life" (was "Goals That Shape Your Freedom").
+   - Golden Age page: removed the remaining "4-Bucket" reference.
+   - Multiple Goals card text (homepage + Solutions): "Comprehensive Freedom Blueprint (7 Events Plan) and Golden Age Blueprint."
+   - "(7 Events Plan)" added to every Comprehensive Freedom Blueprint mention (its page title/heading, 7 Events page button, contact form option).
+
+=====================================================================
+G. AUDIT AGAINST THE "PENDING CORRECTIONS" BRIEF (27 Oct, night)
+=====================================================================
+   - Investor Zone moved to the final position in the menu (Home · About Us · Our Approach · Contact · Investor Zone) — 45 pages.
+   - Homepage "Our Approach" section: added an "Our Flagship Strategy" card (right amount of money at the right time).
+   - Solutions page: removed the extra service boxes ("More Ways We Serve") per note p.6.
+   - NOTE: with "Our Products" removed from the menu and these boxes removed, these pages are no longer linked anywhere:
+     Insurance, Loans, Fixed Income, PMS / Stock Baskets, AIF, Estate Planning (pages still exist). Decide where they should appear.
+
+=====================================================================
+H. APPROVED WORDING RECEIVED (27 Oct, 20:30)
+=====================================================================
+   - Mission (Why We Do What We Do): "To Educate, Inspire and Transform Millions of People to Take Their Income, Wealth and Life
+     from Level 1 to Level 6 Through Our Unique M2M Freedom Blueprint."  (was "Level 8 … Freedom Blueprints" — now confirmed)
+   - Vision: "To Empower People to Live and Experience A Happy and Freedom Life – “A Life They Desire To Live, A Life They Deserve
+     to Live and A Life They Are Born To Live”"
+   - What We Do point 1: "Level 1 to Level 6" to match the approved mission.
+   - Company description, footer of every page (45) and the Who We Are intro — Glosome WealthX wording with Finowise's name:
+     "Finowise Freedom LLP, a part of Freedom LifeX Group, is an AMFI Registered Mutual Fund Distributor & SIF Distributor focused on
+     facilitating mutual fund investments for long-term growth. We provide incidental advice to assist you in selecting mutual fund &
+     SIF schemes suitable for your goal-based investments, helping you work towards your financial objectives."
+     (The name "Glosome WealthX" is not used anywhere on the site.)
+   - Footer (45 pages): removed the "Be Wise >> Be WHealthy >> Be Happy" line under the logo (note p.7 "Remove last logo title below it in box").
+   - "Calculate Your Goal" calculator (teal-blue box, orange sliders/result) now on Single Goal, Multiple Goals and Inspiring Goal pages,
+     each with a blue + orange button pair: "Calculate Your Goal" (orange) and "All Investor Tools" (teal-blue).
+
+=====================================================================
+I. GOAL PLANNERS + FOOTER MARK (28 Oct)
+=====================================================================
+   - Single Goal and Inspiring Goal pages: "Calculate Your Goal" planner built from Single_Goal.xlsx
+     (Goal Name, No. of Years, Current Value, Inflation, Expected Return -> Target Corpus, Lumpsum Investment Required, Required SIP).
+   - Multiple Goals page: "Multiple Goals Planner" built from the Multiple Goals sheet (8 goal rows + Retirement Goal + Assumptions).
+   - Same formulas as Excel (FV / PV / PMT). Verified: all 15 sample figures match the sheets exactly
+     (e.g. Single Goal ₹18,04,356 / ₹9,25,920 / ₹15,166; Retirement fund ₹1,21,96,879, SIP ₹26,899).
+   - Buttons under each planner: "Calculate Your Goal" (orange) and "All Investor Tools" (teal-blue).
+   - Footer of every page: "©" changed to "®" as instructed. NOTE: ® legally indicates a registered trademark — use only if the name is registered.
+   - New file: js/goal-planners.js
+   - Goal pages (Single, Multiple, Inspiring): the two buttons are now "Calculate Your Goal" (orange) and
+     "Book a 15-Minute Introductory Call" (teal-blue, opens Contact). The word "consultation" is not used.
+   - Welcome banner: heading block moved left; slider arrows moved lower so they do not cover the text.
+   - Footer (45 pages): removed "Mutual Funds Sahi Hai" text, kept only "#MutualFundsSahiHai".
+
+=====================================================================
+J. MANISH SIR'S WHATSAPP FIXES (28 Oct)
+=====================================================================
+   - Core Values and Guiding Principles: removed the repeated heading under the page banner ("Core Values and Beliefs" was showing twice).
+   - Client Login was shown twice in the header: removed the top-bar "Client Login"; the "Login" button in the menu stays (footer link stays).
+   - Homepage: removed the "Investor Tools — Know How You Can Achieve Your Goals" calculator section (calculators remain on the Investor Tools page).
+
+=====================================================================
+K. CORRECTIONS 28 Oct (evening)
+=====================================================================
+   - "Our Flagship Strategy" -> "Our Flagship Strategies" on all pages; menu order now Investment Philosophy · Our Solutions · Our Flagship Strategies · Our Services (homepage cards in the same order).
+   - Family Need Blueprint removed (homepage, Solutions, Multiple Goals, Basic Freedom Blueprint button).
+   - Grievance Officer: Praveen@Finowise.in · 95659 08070 — footer of every page, grievance line, and Grievance Redressal page.
+   - What We Do: removed the "Freedom LifeX Group / Who We Are and What We Do" heading in the orange section; removed "Three Promises We Live By";
+     highlighted "Die Rich With Dignity" (point 3) and "Make a Difference in People's Lives" (point 5);
+     "Want your free WHealth Check?" -> "Would you like to start a journey for a Happy and Freedom Life?"
+   - Why We Do What We Do: removed the "Our Purpose" heading and sentence above Mission & Vision.
+   - Flagship Strategies page (was 7 Events Plan): heading "Comprehensive Freedom Blueprint (7 Events Plan)", full sentence, then
+     a Golden Age Blueprint section with its four points (Wealth Flow, Wealth Support, Wealth Growth, Wealth Acceleration).
+   - Goal pages: calculator now comes after the text.
+   - Our Services: removed "Our Services — 1 / — 2" headings; all 12 services in one aligned two-column grid.
+   - Investor Tools page: the "Know How You Can Achieve Your Goals" block (removed from the homepage) now sits above the calculators.
+   - Words of Wisdom removed from menus/footers; Testimonials removed from menus/footers and the homepage "See More Feedback" button.
+   - Important Links: each link shows its website's own logo (loaded from the site at view time; initials shown if it can't load).
+   - Investor Resources: removed Unclaimed Amounts, Important Links and Client Login cards.
+   - Find Unclaimed Amount: AMFI Unclaimed Redemption link updated to https://www.amfiindia.com/online-center/unclaimed-redemption
+   - Footer box (45 pages): removed "is an AMFI Registered … for long-term growth"; now "Finowise Freedom LLP is a part of Freedom LifeX Group. We provide incidental advice…"
+
+=====================================================================
+L. 28 Oct (night)
+=====================================================================
+   - Investor Resources: removed the Calculators card.
+   - Flagship Strategies page: removed the repeated "Our Flagship Strategies" label above "Golden Age Blueprint".
+   - Core Values: the quoted lines that were plain italics are now highlighted in orange like the other key phrases.
+   - Multiple Goals Planner: now starts empty for visitors to fill in — goal name (choose from a list or type), No. of Years (dropdown),
+     Inflation and Expected Return (dropdowns, default 7% / 12%), Current Value (typed); Retirement row with Years dropdown, age and
+     monthly lifestyle; Assumptions as dropdowns (6% / 12% / 85 yrs). Same Excel formulas — re-tested with the sheet's figures: all match.
+   - The Multiple Goals Planner is also added to the Investor Tools page, above the other calculators.
+   - Grievance Redressal page rebuilt as an escalation matrix (format of glosomewealthx.com, with Finowise details):
+     Level 1 Customer Service Desk — connect@finowise.in · 90763 72846; Level 2 Escalation — Vishal@Finowise.in · 90447 34741;
+     Level 3 Grievance Officer — Praveen@Finowise.in · 95659 08070 (final level within Finowise Freedom LLP);
+     Level 4 AMC / RTA (CAMS, KFin Technologies); Level 5 SEBI SCORES (1800 22 7575) / SMART ODR. "What to Include" and ARN kept.
+   - NEW PAGE pages/culture-charter.html — Culture Charter: Core Values and Beliefs; Work Conduct – External; Work Conduct – Internal
+     (text exactly as supplied, key phrases highlighted). Homepage "Culture Charter — Coming Soon" card now opens it; added to footer Explore.
+   - Homepage "Our Multiple Goals Frameworks" and Solutions page "Multiple Goals Frameworks / Signature Finowise Architectures" headings -> "Our Flagship Strategies".
+
+M. 28 Oct tech meeting recording + USP document
+- Homepage "What Sets Us Apart": the 3 generic cards replaced by the 21 USPs in 3 categories (7 each); tap a category to open its seven points.
+- Homepage order: Our Flagship Strategies now comes before Our Solutions (Design Your Life).
+- Why We Do: "We exist to replace chance with choice..." sentence kept above Mission & Vision (no extra heading).
+- Multiple Goals page: Family Need / Comprehensive / Golden Age cards removed; original Multiple Goals write-up restored, calculator below it.
+- Multiple Goals Planner (Multiple Goals page + Investor Tools): starts with one goal row, "Add Another Goal" button adds rows (up to 8).
+- Inspiring Goal page: calculator removed; only write-up + Discuss Your Inspiring Goal + All Solutions.
+- Multiple Goals page: PPT line "Portfolio construction & asset allocation tailored to your risk profile." added as the opening line.
+- Inspiring Goal page: PPT line "We ensure that recommended products match a client's risk tolerance, financial goals, and time horizon." added as the opening line.
+- Shreedevi Ma'am (Chief Happiness Officer): happiness line added under her profile on Our Team and the Who We Are pop-up (needs her approval).
+- Inspiring Goal page: calculator and earlier content restored (PPT line kept on top).
+- Investment Philosophy page: Investor Tools section (Know How You Can Achieve Your Goals) added after the wordings, exactly as it was on the old homepage. Homepage unchanged (still without it).
+- Flagship Strategies headings: '(7 Events Plan)' moved to the next line under 'Comprehensive Freedom Blueprint'.
+- Investment Philosophy: Investor Tools section moved up, right after the opening sentences (before the Five Principles).
+- 21 USPs moved to their own page (pages/usp.html, "What Sets Us Apart") so the homepage stays short; homepage keeps only the 3 category cards, each opening its 7 USPs on that page.
+- Homepage: 'The ICSE Framework' heading changed to 'The I.C.S.E Framework'.
+
+N. 30 Oct
+- Impact Snapshot: "10 Million" changed to "Mission to Millions".
+- Homepage "Why We Exist": Who We Are, What We Do and Why We Do What We Do now open inside the homepage (click a card to open, click again or Close to shut) — no separate pages. Menu and footer links on every page now open these homepage sections. The old page addresses (about.html, what-we-do.html, why-we-do.html) just forward to the homepage section, so old links still work.
+- Who We Are / What We Do / Why We Do: content now opens directly under the clicked card; 'Read more' label removed.
