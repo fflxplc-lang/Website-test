@@ -51,6 +51,12 @@
     .fq-msg.err{color:#e74c3c;background:#fdf0ef}.fq-msg.ok{color:#1e7e4a;background:#eaf7ef}
     .fq-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
     .fq-card [hidden]{display:none!important}
+    .fq-pillars.fq-pillars-4{grid-template-columns:repeat(4,1fr)}
+    .fq-full .fq-bar-row{grid-template-columns:160px 1fr 52px}
+    .fq-bar-note{margin-top:-8px;padding-left:172px;font-size:.82rem;color:var(--text-light)}
+    .fq-analysis{margin-bottom:16px}.fq-analysis p{margin:0;color:var(--text)}
+    .fq-full{margin-top:8px}
+    .fq-slots{margin-top:18px}.fq-slots-help{margin:0 0 16px;color:var(--text-light);font-size:.92rem}.fq-opt{font-weight:400;color:var(--text-light)}
     .fq-lockwrap{position:relative}
     .fq-result-head.is-locked{filter:blur(9px);user-select:none;pointer-events:none}
     .fq-lock-note{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;border:1px solid var(--border);border-radius:99px;padding:10px 18px;font-weight:600;color:var(--secondary);box-shadow:var(--shadow-md);text-align:center;max-width:92%}
@@ -61,7 +67,7 @@
     .fq-connect-q{font-weight:600;color:var(--secondary);margin:0;font-size:1.05rem}
     .fq-connect .fq-actions{margin-top:16px}
     #fqSaveMsg .fq-msg{margin:18px 0 0}
-    @media(max-width:768px){.fq-card{padding:24px 18px}.fq-pillars{grid-template-columns:repeat(3,1fr)}.fq-q{font-size:1.2rem}.fq-bar-row{grid-template-columns:96px 1fr 40px;font-size:.82rem}.fq-ring{margin:0 auto}.fq-result-head{justify-content:center;text-align:center}}
+    @media(max-width:768px){.fq-card{padding:24px 18px}.fq-pillars,.fq-pillars.fq-pillars-4{grid-template-columns:repeat(2,1fr)}.fq-full .fq-bar-row{grid-template-columns:110px 1fr 44px}.fq-bar-note{padding-left:0;margin-top:-6px}.fq-q{font-size:1.2rem}.fq-bar-row{grid-template-columns:96px 1fr 40px;font-size:.82rem}.fq-ring{margin:0 auto}.fq-result-head{justify-content:center;text-align:center}}
   </style>
 </head>
 <body>
@@ -129,7 +135,7 @@
     <div class="container">
       <div class="breadcrumb"><a href="../index.html">Home</a> / <span>Know Your FQ Score</span></div>
       <h1>Know Your FQ Score</h1>
-      <p class="subtitle">Your Financial Quotient — a 2-minute check-up of your money habits</p>
+      <p class="subtitle">Your Financial Quotient — a 5-minute check-up of your money habits</p>
     </div>
   </section>
 
@@ -141,13 +147,12 @@
           <div class="fq-step is-active" id="fqIntro" data-testid="fq-intro">
             <span class="fq-kicker">Financial Quotient Test</span>
             <h2>How financially wise are you today?</h2>
-            <p class="lead">Answer 10 quick questions across the five pillars of financial freedom. Tell us a little about yourself, answer the questions and get your FQ score out of 100.</p>
-            <div class="fq-pillars">
-              <div class="fq-pillar"><i class="fa-solid fa-wallet"></i>Earning</div>
-              <div class="fq-pillar"><i class="fa-solid fa-piggy-bank"></i>Saving</div>
-              <div class="fq-pillar"><i class="fa-solid fa-chart-line"></i>Investing</div>
-              <div class="fq-pillar"><i class="fa-solid fa-shield-halved"></i>Protection</div>
-              <div class="fq-pillar"><i class="fa-solid fa-route"></i>Planning</div>
+            <p class="lead">Tell us a little about yourself, answer 20 quick questions across the four indices of financial intelligence and get your FQ score out of 100.</p>
+            <div class="fq-pillars fq-pillars-4">
+              <div class="fq-pillar"><i class="fa-solid fa-eye"></i>Awareness</div>
+              <div class="fq-pillar"><i class="fa-solid fa-bullseye"></i>Clarity</div>
+              <div class="fq-pillar"><i class="fa-solid fa-shield-halved"></i>Preparedness</div>
+              <div class="fq-pillar"><i class="fa-solid fa-route"></i>Readiness</div>
             </div>
             <form id="fqLeadForm" class="contact-form" novalidate>
               <div class="form-row">
@@ -168,6 +173,11 @@
               </div>
               <div class="form-row">
                 <div class="form-group"><label for="fqCity">City *</label><input type="text" id="fqCity" name="city" required maxlength="60" data-testid="fq-city-input" /></div>
+                <div class="form-group"><label for="fqStage">Age Group *</label>
+                  <select id="fqStage" name="stage" required data-testid="fq-stage-select">
+                    <option value="">Select your age group</option>
+                  </select>
+                </div>
               </div>
               <button type="submit" class="btn btn-primary" data-testid="fq-start-btn">Start the FQ Test <i class="fa-solid fa-arrow-right"></i></button>
             </form>
@@ -215,12 +225,36 @@
               <button type="submit" class="btn btn-primary" data-testid="fq-unlock-btn"><i class="fa-solid fa-lock-open"></i> Unlock My FQ Score</button>
             </form>
 
+            <div class="fq-full" id="fqFull" hidden data-testid="fq-full-result">
+              <div class="fq-bars" id="fqBars" data-testid="fq-index-bars"></div>
+              <div class="fq-tips fq-analysis">
+                <h4 id="fqLowestHead"></h4>
+                <p id="fqAnalysis"></p>
+              </div>
+              <div class="fq-tips"><h4>Your immediate action steps</h4><ul id="fqTips" data-testid="fq-tips"></ul></div>
+            </div>
+
             <div class="fq-connect" id="fqConnect" hidden data-testid="fq-connect">
               <p class="fq-connect-q">Would you like to connect with our team to understand your FQ score and get more detailed insights?</p>
               <div class="fq-actions" id="fqConnectBtns">
                 <button type="button" class="btn btn-primary" id="fqYes" data-testid="fq-yes-btn"><i class="fa-solid fa-check"></i> Yes</button>
                 <button type="button" class="btn btn-outline-dark" id="fqNo" data-testid="fq-no-btn">No</button>
               </div>
+              <form id="fqSlots" class="contact-form fq-slots" hidden novalidate data-testid="fq-slots-form">
+                <h4 class="fq-sub">When suits you?</h4>
+                <p class="fq-slots-help">Give up to 3 times that work for you and our team will confirm one. Not sure yet? Skip this and we will suggest a time.</p>
+                <div class="form-row">
+                  <div class="form-group"><label for="fqSlot1">Preferred time 1 <span class="fq-opt">(optional)</span></label><input type="datetime-local" id="fqSlot1" name="slot" data-testid="fq-slot-1" /></div>
+                  <div class="form-group"><label for="fqSlot2">Preferred time 2 <span class="fq-opt">(optional)</span></label><input type="datetime-local" id="fqSlot2" name="slot" data-testid="fq-slot-2" /></div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group"><label for="fqSlot3">Preferred time 3 <span class="fq-opt">(optional)</span></label><input type="datetime-local" id="fqSlot3" name="slot" data-testid="fq-slot-3" /></div>
+                </div>
+                <div class="fq-actions" style="margin-top:6px">
+                  <button type="submit" class="btn btn-primary" id="fqSlotsSend" data-testid="fq-slots-send"><i class="fa-solid fa-paper-plane"></i> Send to Our Team</button>
+                  <button type="button" class="btn btn-outline-dark" id="fqSlotsSkip" data-testid="fq-slots-skip">Skip, suggest a time for me</button>
+                </div>
+              </form>
             </div>
             <div id="fqSaveMsg" data-testid="fq-save-msg"></div>
             <div class="fq-actions">
@@ -322,6 +356,7 @@
   <!-- Where "Yes, connect me" sends the client's details: the Finowise BOSS LMS.
        Change this one line to point at the live LMS. -->
   <script>window.FINOWISE_LMS_URL = "https://test.freedomlifex.in";</script>
+  <script src="../js/fq-bank.js"></script>
   <script src="../js/fq-test.js"></script>
 </body>
 </html>
