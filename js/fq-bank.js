@@ -1,7 +1,7 @@
 /* The Finowise BOSS FQ assessment: one 20-question bank per age group, with the
-   bands, analysis, action steps and index notes, copied from the BOSS LMS
-   (public/index.html: FQ_STAGE_BANK, FQ_STAGES, sectionNotes). Answers are best
-   first and score 8 / 4 / 2 / 1 by position. Keep this in step with the LMS. */
+   bands, analysis, action steps, index notes and milestone messages, copied from
+   the BOSS LMS (public/index.html: FQ_STAGE_BANK, FQ_STAGES, defaultFqAssessment).
+   Answers are best first and score 8 / 4 / 2 / 1 by position. Keep in step with the LMS. */
 window.FQ_BANK = {
  "weights": [
   8,
@@ -1015,6 +1015,32 @@ window.FQ_BANK = {
      ]
     }
    ]
+  }
+ ],
+ "motivate": [
+  {
+   "section": "Awareness Index",
+   "icon": "⚡",
+   "title": "Amazing, {Name}! Awareness is 80% of wealth building.",
+   "msg": "Most people never even see where money leaks. You just did. That's the real wealth skill."
+  },
+  {
+   "section": "Clarity Index",
+   "icon": "⚡",
+   "title": "Clarity is Power - you're building your Financial GPS",
+   "msg": "When you know your exact Freedom Number, every rupee gets a purpose. You're building your GPS."
+  },
+  {
+   "section": "Preparedness Index",
+   "icon": "⚡",
+   "title": "Preparation is your superpower. Almost there!",
+   "msg": "Emergency fund, insurance, allocation — boring but this is what makes rich stay rich."
+  },
+  {
+   "section": "Readiness Index",
+   "icon": "⚡",
+   "title": "Readiness is where it all becomes real.",
+   "msg": "A system beats willpower every time. This is the quadrant that turns intent into money."
   }
  ]
 };
