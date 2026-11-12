@@ -262,3 +262,27 @@ N. 30 Oct
 - Impact Snapshot: "10 Million" changed to "Mission to Millions".
 - Homepage "Why We Exist": Who We Are, What We Do and Why We Do What We Do now open inside the homepage (click a card to open, click again or Close to shut) — no separate pages. Menu and footer links on every page now open these homepage sections. The old page addresses (about.html, what-we-do.html, why-we-do.html) just forward to the homepage section, so old links still work.
 - Who We Are / What We Do / Why We Do: content now opens directly under the clicked card; 'Read more' label removed.
+- Who We Are: each team member's headline (from the story paragraph) now appears under their own photo.
+- Who We Are: team shown as aligned cards — photo, then name, role and full profile directly below each photo (same order as before).
+- Homepage: Our Story (United by a Shared Vision) team section — photos with full write-ups — now shows directly on the homepage just before Client Stories, no click needed (call with Manish Sir, 31 Oct). Removed from the Who We Are drop-down so it isn't repeated.
+- Guiding Principles (7 Ps): each principle now has a real photo (not an icon) — Purpose: road to the sunrise; People: team meeting; Passion: runner sprinting; Product: two professionals working on a solution; Process: task board of sticky notes; Profit: market graph; Progress: stairs up a hillside. Photos are free Unsplash-licence images loaded from images.unsplash.com (photographers: Itati Dzekedzeke, Vitaly Gariev, Jorge Alberto Vega Barrera, Paymo, Arturo Añez, Jacob Padilla). Photo left / text right on desktop, photo on top on phone; if a photo ever fails to load the card simply shows without it.
+- 7 Ps / People: photo replaced with our own leadership team (collage of the six team photos, images/team-collage.jpg) instead of a stock photo.
+- Lighthouse banner: photo is now also set from the stylesheet, so it shows even in viewers that block inline styles (no visual change).
+- Culture Charter page: round pictures (icons) removed from the three cards; numbers and text unchanged.
+- Guiding Principles (7 Ps): all pictures removed (the photos and the round icon pictures); number, heading and text kept.
+- Homepage team cards (Our Story): all six cards are now the same size; longer write-ups show the first lines with a 'Read more' button (opens the rest, 'Read less' closes it).
+
+O. 12 Nov — matched to the Freedom LifeX website (freedomlifex-website-5.vercel.app)
+- Impact Snapshot: Our Team Size 30+ -> 100+.
+- Impact Snapshot: 'Mission to Millions' label now reads 'Empowering Millions of People to Happy & Freedom Life'.
+- 12 Nov (matched to freedomlifex-website-6.vercel.app):
+  - Mission to Millions line: "Empowering Millions of People to Experience Happy & Freedom Life".
+  - Our Flagship Strategies: third card "Financial Success Ladder — Climb step by step from financial security to financial freedom." (opens Contact, as on the Freedom LifeX site).
+  - What Drives Us: Core Values, Guiding Principles and Culture Charter now open inside the homepage under the clicked card (Close button), same as Why We Exist. Their separate pages are kept unchanged.
+
+P. 12 Nov — Know Your FQ Score: the Finowise BOSS assessment, leads stored in BOSS
+- FQ test page replaced with the BOSS LMS FQ assessment (from Website-test-main): life-stage picker, 20 questions per age group across the 4 indices (Awareness, Clarity, Preparedness, Readiness), milestone after each index, result unlocked after basic details, score + category + index breakdown.
+- New files: css/fq-boss.css, js/fq-bank.js (question bank, same as BOSS public/index.html). js/fq-test.js rewritten.
+- "Yes, connect me" (with up to 3 preferred call times) sends the client's details and full FQ result to the Finowise BOSS LMS at https://boss.finowise.com/api/public/website-lead, where it is stored as a lead (source: website FQ test), routed to the branch matching the city and the RM with the fewest open leads. A repeat test from the same mobile updates the existing lead.
+- If BOSS cannot be reached, the client gets a one-tap WhatsApp message with all the details, so no lead is lost. "No" sends nothing.
+- To change where leads go, edit the one line window.FINOWISE_LMS_URL in pages/fq-test.html.
