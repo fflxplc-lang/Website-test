@@ -1,0 +1,27 @@
+/* Goal-card "Start My Blueprint" button and the short details pop-up. */
+.bp-start{margin-top:16px;display:inline-flex;align-items:center;gap:8px}
+.explore-link + .bp-start{margin-left:14px}
+.page-card .bp-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+.page-card .bp-actions .explore-link{align-self:center}
+.bp-modal{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(5,30,36,.55)}
+.bp-modal[hidden]{display:none}
+.bp-dialog{background:#fff;border-radius:18px;max-width:560px;width:100%;max-height:92vh;overflow:auto;padding:30px 28px;box-shadow:0 30px 80px rgba(0,0,0,.25);position:relative}
+.bp-dialog h3{font-family:'Playfair Display',serif;color:var(--secondary);margin:0 0 6px;font-size:1.5rem}
+.bp-dialog .bp-sub{color:var(--text-light);margin:0 0 18px;font-size:.92rem}
+.bp-dialog .bp-tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--primary);margin-bottom:6px}
+.bp-close{position:absolute;top:12px;right:14px;background:none;border:0;font-size:1.6rem;line-height:1;cursor:pointer;color:var(--text-light)}
+.bp-dialog .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.bp-dialog .form-group{margin-bottom:14px}
+.bp-dialog label{display:block;font-weight:600;font-size:.88rem;margin-bottom:6px;color:var(--secondary)}
+.bp-dialog input[type=text],.bp-dialog input[type=tel],.bp-dialog input[type=email]{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font:inherit}
+.bp-consent{display:flex;gap:10px;align-items:flex-start;font-size:.85rem;color:var(--text);margin:4px 0 16px}
+.bp-consent input{margin-top:3px}
+.bp-msg{padding:12px 14px;border-radius:10px;margin-bottom:14px;font-size:.9rem}
+.bp-msg.err{color:#b42318;background:#fef3f2}.bp-msg.ok{color:#1e7e4a;background:#eaf7ef}
+.bp-msg a{font-weight:700}
+.bp-note{font-size:.78rem;color:var(--text-light);margin:12px 0 0}
+@media(max-width:560px){.bp-dialog .form-row{grid-template-columns:1fr}.bp-dialog{padding:24px 18px}.explore-link + .bp-start{margin-left:0}}
+/* Sit with the card's own left-aligned text, not stretched across it. */
+.goal-card .bp-start{width:auto!important;display:inline-flex!important;align-self:flex-start;justify-self:start}
+.page-card .bp-actions{justify-content:flex-start;align-items:center;justify-self:start}
+.page-card .bp-actions .btn{width:auto}
