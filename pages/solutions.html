@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="../css/style.css" />
   
   
+  <link rel="stylesheet" href="../css/blueprint.css" />
 </head>
 <body>
   <div class="top-bar">
@@ -90,13 +91,16 @@
       <div class="goal-cards">
         <div class="goal-card"><div class="goal-icon"><i class="fa-solid fa-flag"></i></div><span class="goal-tag">Focused</span><h3>Single Goal</h3>
           <p>One clear destination — child’s education, vacation or early retirement. A dedicated SIP and portfolio design mapped to that single outcome.</p>
-          <a href="solutions-single.html" class="explore-link">Explore <i class="fa-solid fa-arrow-right"></i></a></div>
+          <a href="solutions-single.html" class="explore-link">Explore <i class="fa-solid fa-arrow-right"></i></a>
+          <button type="button" class="btn btn-primary btn-sm bp-start" data-blueprint-goal="single" data-testid="bp-card-single"><i class="fa-solid fa-file-pen"></i> Start My Blueprint</button></div>
         <div class="goal-card accent"><div class="goal-icon"><i class="fa-solid fa-diagram-project"></i></div><span class="goal-tag">Holistic</span><h3>Multiple Goals</h3>
           <p>Comprehensive Freedom Blueprint (7 Events Plan) and Golden Age Blueprint.</p>
-          <a href="solutions-multiple.html" class="explore-link">Explore <i class="fa-solid fa-arrow-right"></i></a></div>
+          <a href="solutions-multiple.html" class="explore-link">Explore <i class="fa-solid fa-arrow-right"></i></a>
+          <button type="button" class="btn btn-primary btn-sm bp-start" data-blueprint-goal="multiple" data-testid="bp-card-multiple"><i class="fa-solid fa-file-pen"></i> Start My Blueprint</button></div>
         <div class="goal-card"><div class="goal-icon"><i class="fa-solid fa-rocket"></i></div><span class="goal-tag">Aspirational</span><h3>Inspiring Goal</h3>
           <p>Live your life — choose this goal to lead a financially free life, the life you are born to live and desire to live.</p>
-          <a href="solutions-inspiring.html" class="explore-link">Explore <i class="fa-solid fa-arrow-right"></i></a></div>
+          <a href="solutions-inspiring.html" class="explore-link">Explore <i class="fa-solid fa-arrow-right"></i></a>
+          <button type="button" class="btn btn-primary btn-sm bp-start" data-blueprint-goal="inspiring" data-testid="bp-card-inspiring"><i class="fa-solid fa-file-pen"></i> Start My Blueprint</button></div>
       </div>
     </div>
   </section>
@@ -104,8 +108,10 @@
     <div class="container">
       <div class="section-header"><span class="subtitle">Multiple Goals</span><h2>Our Flagship Strategies</h2></div>
       <div class="page-cards-grid">
-        <a href="solutions-7-events.html" class="page-card"><div class="page-card-icon"><i class="fa-solid fa-list-ol"></i></div><h4>Comprehensive Freedom Blueprint<br />(7 Events Plan)</h4><p>Our Flagship Strategies — to ensure the availability of the right amount of money at the right time.</p></a>
-        <a href="solutions-golden-age.html" class="page-card"><div class="page-card-icon"><i class="fa-solid fa-sun"></i></div><h4>Golden Age Blueprint</h4><p>Design your golden age with freedom cash-flow.</p></a>
+        <div class="page-card"><div class="page-card-icon"><i class="fa-solid fa-list-ol"></i></div><h4>Comprehensive Freedom Blueprint<br />(7 Events Plan)</h4><p>Our Flagship Strategies — to ensure the availability of the right amount of money at the right time.</p>
+          <div class="bp-actions"><a href="solutions-7-events.html" class="explore-link">Explore <i class="fa-solid fa-arrow-right"></i></a><button type="button" class="btn btn-primary btn-sm" data-blueprint-goal="sevenevents" data-testid="bp-card-sevenevents"><i class="fa-solid fa-file-pen"></i> Start My Blueprint</button></div></div>
+        <div class="page-card"><div class="page-card-icon"><i class="fa-solid fa-sun"></i></div><h4>Golden Age Blueprint</h4><p>Design your golden age with freedom cash-flow.</p>
+          <div class="bp-actions"><a href="solutions-golden-age.html" class="explore-link">Explore <i class="fa-solid fa-arrow-right"></i></a><button type="button" class="btn btn-primary btn-sm" data-blueprint-goal="goldenage" data-testid="bp-card-goldenage"><i class="fa-solid fa-file-pen"></i> Start My Blueprint</button></div></div>
       </div>
     </div>
   </section>
@@ -215,6 +221,8 @@
     <i class="fa-brands fa-whatsapp"></i>
   </a>
   <script src="../js/main.prod.js"></script>
+  <script src="../js/lms-config.js"></script>
+  <script src="../js/blueprint.js"></script>
   
 </body>
 </html>
