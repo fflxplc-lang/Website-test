@@ -33,7 +33,8 @@
   var isSheet = !!F.sheet;
   var R = F.rules || {};
   var DRAFT_KEY = "fw_bp_draft_" + goalKey;
-  var state = { basics: {}, sheet: null, consent: false, sending: false, done: null };
+  var state = { basics: {}, sheet: null, consent: false, sending: false, done: null, step: 1, iseq: {}, result: null };
+  var IQ = DEF.iseq;
 
   /* ---------------- small helpers ---------------- */
   function esc(v) { return String(v == null ? "" : v).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
@@ -62,7 +63,7 @@
   function today() { var d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10); }
   function inr(n) { n = Number(n) || 0; return n >= 1e7 ? "₹" + (n / 1e7).toFixed(n % 1e7 ? 2 : 0) + " Cr" : "₹" + n.toLocaleString("en-IN"); }
   function saveDraft() {
-    try { localStorage.setItem(DRAFT_KEY, JSON.stringify({ basics: state.basics, sheet: isSheet ? Object.assign({}, state.sheet, { docs: [] }) : state.sheet, at: Date.now() })); } catch (e) { /* full or private */ }
+    try { localStorage.setItem(DRAFT_KEY, JSON.stringify({ basics: state.basics, sheet: isSheet ? Object.assign({}, state.sheet, { docs: [] }) : state.sheet, iseq: state.iseq, at: Date.now() })); } catch (e) { /* full or private */ }
   }
   function loadDraft() { try { return JSON.parse(localStorage.getItem(DRAFT_KEY) || "null"); } catch (e) { return null; } }
 
@@ -250,7 +251,7 @@
         : sec.kind === "ladder" ? ladderSec(sec) : sec.kind === "assets" ? assetsSec(sec) : "";
       if (!body) return;
       n++;
-      var title = sec.card || sec.label, own = sec.label && sec.label !== sec.card ? sec.label : "";
+      var title = sec.card || sec.label, own = sec.label && String(title).toLowerCase().indexOf(String(sec.label).toLowerCase()) < 0 ? sec.label : "";
       html += sectionWrap(String(n), title + (own && !/^(Basic details)$/.test(title) ? " · " + own : ""), sec.hint || "", body, "bp-sec-" + sec.key);
     });
     return html;
@@ -281,11 +282,86 @@
     return html;
   }
 
+  /* ---------------- the ISEQ, as BOSS's unified client page asks it ----------------
+     It opens after the Input Form, on its own page, and which questionnaire it
+     is comes off the date of birth in "Your details": under 50 or 50 and over.
+     Scored the way BOSS scores it: the points each answer carries, times the
+     version's multiplier, read against its bands. */
+  function ageOf(dob) {
+    var d = new Date(String(dob || "") + "T00:00:00"); if (isNaN(d)) return null;
+    var n = new Date(), a = n.getFullYear() - d.getFullYear();
+    if (n.getMonth() < d.getMonth() || (n.getMonth() === d.getMonth() && n.getDate() < d.getDate())) a--;
+    return a >= 0 && a <= 120 ? a : null;
+  }
+  function iseqType() { var a = ageOf(state.basics.me_dob); return a === null ? "" : (a < IQ.ageSplit ? IQ.under : IQ.over); }
+  function iseqDef() { return IQ.types[iseqType()] || null; }
+  function iseqScore() {
+    var T = iseqDef(); if (!T) return null;
+    var raw = 0, rawMax = 0;
+    T.fields.forEach(function (f) {
+      var pts = Object.keys(f.scores || {}).map(function (k) { return Number(f.scores[k]); }).filter(function (n) { return !isNaN(n); });
+      rawMax += pts.length ? Math.max.apply(null, pts) : 0;
+      var a = state.iseq[f.k];
+      if (a !== undefined && f.scores && f.scores[a] !== undefined) raw += Number(f.scores[a]);
+    });
+    var m = Number(T.multiplier) || 1, score = raw * m, max = rawMax * m, band = null;
+    T.bands.forEach(function (b) { if (Number(b.min) <= score) band = b; });
+    var cat = band ? band.category : "";
+    var alloc = T.alloc[cat] || null, matrix = IQ.matrix[cat] || null;
+    return { type: iseqType(), raw: raw, score: score, max: max, category: cat, note: T.notes[cat] || "", alloc: alloc, matrix: matrix,
+      horizons: matrix ? matrix.map(function (r) { return r.horizon + " \u2014 " + r.what; }).join("\n") : "" };
+  }
+  function num(v) { var n = Number(v); return isFinite(n) ? String(Math.round(n * 100) / 100) : ""; }
+  function iseqPageHtml() {
+    var T = iseqDef(), age = ageOf(state.basics.me_dob);
+    var done = T.fields.filter(function (f) { return state.iseq[f.k] !== undefined; }).length, total = T.fields.length;
+    var who = (state.basics.me_name || "").trim();
+    return '<div class="bp-card bp-intro"><span class="bp-tag">Step 2 of 2</span><h2>' + esc(IQ.label) + '</h2><p>' + (who ? esc(who) + " — t" : "T") +
+      "hese " + total + " question" + (total === 1 ? "" : "s") + " are the ones that suit your age" + (age === null ? "" : " (" + age + ")") + ". There are no right answers, only what is true for you.</p></div>" +
+      '<div class="bp-card bp-iseq-prog"><div class="bp-dots">' + T.fields.map(function (f) { return '<i class="' + (state.iseq[f.k] !== undefined ? "on" : "") + '"></i>'; }).join("") +
+      '</div><div class="bp-muted" data-testid="bp-iseq-count">' + done + " of " + total + " answered</div></div>" +
+      T.fields.map(function (f, qi) {
+        return '<div class="bp-card bp-iseq-q" id="iseqq_' + esc(f.k) + '"><div class="bp-tag">Question ' + (qi + 1) + " of " + total + "</div><h3>" + esc(f.l) + "</h3>" +
+          (f.note ? '<p class="bp-help">' + esc(f.note) + "</p>" : "") + '<div class="bp-opts">' +
+          (f.opts || []).map(function (o, i) {
+            var on = state.iseq[f.k] === o;
+            return '<button type="button" class="bp-opt' + (on ? " on" : "") + '" data-iseq="' + esc(f.k) + '" data-i="' + i + '" data-testid="bp-iseq-' + esc(f.k) + "-" + i + '">' +
+              '<span class="bp-rad">' + (on ? "<i></i>" : "") + '</span><span class="bp-txt">' + esc(o) + '</span><span class="bp-ltr">' + "ABCDEF".charAt(i) + "</span></button>";
+          }).join("") + "</div></div>";
+      }).join("") +
+      '<div class="bp-card bp-submit"><label class="bp-consent"><input type="checkbox" id="bpConsent" data-testid="bp-consent"' + (state.consent ? " checked" : "") + "> I agree to share these details with the Finowise team and to be contacted about my blueprint.</label>" +
+      '<div id="bpMsg"></div><div class="bp-nav"><button type="button" class="btn btn-outline-dark" id="bpBack" data-testid="bp-back">← Back to your Input Form</button>' +
+      '<button type="button" class="btn btn-primary" id="bpSendAll" data-testid="bp-send-all"' + (state.sending ? " disabled" : "") + ">" + (state.sending ? "Sending…" : 'Submit everything <i class="fa-solid fa-paper-plane"></i>') + "</button></div>" +
+      '<p class="bp-help" style="margin-top:12px">Your Input Form is held as you left it — nothing is sent until you press Submit.</p></div>';
+  }
+  // What the client sees once it is in: that it arrived, their risk profile, what happens next.
+  function donePageHtml() {
+    var r = state.result, circ = 326.56, pct = r && r.max ? Math.max(0, Math.min(100, Math.round(r.score / r.max * 100))) : 0;
+    return '<div class="bp-card bp-done" data-testid="bp-done"><div class="bp-tick">✓</div><h2>Thank you for your submission</h2><p>' + esc(state.done) + "</p></div>" +
+      (r ? '<div class="bp-card bp-iseq-res" data-testid="bp-iseq-result"><span class="bp-tag">ISEQ result</span>' +
+        '<div class="bp-ring"><svg viewBox="0 0 120 120" aria-label="ISEQ score ' + esc(num(r.score)) + " out of " + esc(num(r.max)) + '"><circle cx="60" cy="60" r="52" fill="none" stroke="#EEE8E2" stroke-width="12"></circle>' +
+        '<circle cx="60" cy="60" r="52" fill="none" stroke="var(--primary)" stroke-width="12" stroke-linecap="round" stroke-dasharray="' + (pct / 100 * circ).toFixed(2) + " " + circ + '" transform="rotate(-90 60 60)"></circle></svg>' +
+        '<div class="bp-ring-mid"><b data-testid="bp-iseq-score">' + esc(num(r.score)) + "</b><small>OF " + esc(num(r.max)) + "</small></div></div>" +
+        '<h3 data-testid="bp-iseq-category">' + esc(r.category) + "</h3>" + (r.note ? '<p class="bp-help" style="font-size:.92rem">' + esc(r.note) + "</p>" : "") +
+        (r.alloc ? '<h4 class="bp-tt">Primary asset allocation recommended for you</h4><div class="bp-alloc"><div><b>' + esc(r.alloc.equity) + "</b><span>Equity</span></div><div><b>" + esc(r.alloc.debt) + "</b><span>Debt</span></div><div><b>" + esc(r.alloc.gold) + "</b><span>Gold</span></div></div>" : "") +
+        (r.matrix ? '<h4 class="bp-tt">And what to hold, by how long the money is for</h4><div class="bp-tw"><table class="bp-t"><thead><tr><th>Investment duration</th><th>Time horizon</th><th>' + esc(r.category) + "</th></tr></thead><tbody>" +
+          r.matrix.map(function (m) { return "<tr><td>" + esc(m.duration) + "</td><td>" + esc(m.horizon) + "</td><td><b>" + esc(m.what) + "</b></td></tr>"; }).join("") + "</tbody></table></div>" : "") +
+        '<p class="bp-help" style="margin-top:10px">Your financial goals are time bound, so the horizon matters as much as the score' + (r.matrix ? ": the row your money falls in is the one to read" : "") + ". " +
+        (r.alloc ? "The split above is set against this score; c" : "C") + "hanging it needs your consent in writing.</p></div>" : "") +
+      '<div class="bp-card"><span class="bp-tag">What happens next</span><p style="margin:6px 0 0">Our team will connect with you shortly.</p><p style="margin-top:14px"><a class="btn btn-primary" href="solutions.html">Back to Solutions</a></p></div>';
+  }
+
   /* ---------------- the page ---------------- */
   function render() {
     if (state.done) {
-      root.innerHTML = '<div class="bp-card bp-done" data-testid="bp-done"><div class="bp-tick">✓</div><h2>Thank you!</h2><p>' + esc(state.done) + '</p><p><a class="btn btn-primary" href="solutions.html">Back to Solutions</a></p></div>';
+      root.innerHTML = donePageHtml();
       window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    if (state.step === 2 && iseqDef()) {
+      var keep2 = window.scrollY;
+      root.innerHTML = iseqPageHtml();
+      window.scrollTo(0, keep2);
       return;
     }
     var keep = window.scrollY;
@@ -293,8 +369,8 @@
       '<div class="bp-card bp-intro"><span class="bp-tag">' + esc(goal.title) + "</span><h2>" + esc(F.label) + ' — Investment Blueprint Input Form</h2><p>Fill in what applies to you and press Submit. Leave a line blank if it does not apply. It goes straight to your Finowise relationship manager.</p></div>' +
       Object.keys(DEF.lists).map(function (k) { return '<datalist id="bpdl-' + esc(k.replace(/[^A-Za-z0-9]/g, "_")) + '">' + DEF.lists[k].map(function (o) { return '<option value="' + esc(o[1]) + '">'; }).join("") + "</datalist>"; }).join("") +
       '<form id="bpForm" novalidate>' + basicsHtml() + (isSheet ? sheetSectionsHtml() : templateHtml()) +
-      '<div class="bp-card bp-submit"><label class="bp-consent"><input type="checkbox" id="bpConsent" data-testid="bp-consent"' + (state.consent ? " checked" : "") + "> I agree to share these details with the Finowise team and to be contacted about my blueprint.</label>" +
-      '<div id="bpMsg"></div><button type="submit" class="btn btn-primary" id="bpSend" data-testid="bp-send"' + (state.sending ? " disabled" : "") + ">" + (state.sending ? "Sending…" : 'Submit My Blueprint Form <i class="fa-solid fa-paper-plane"></i>') + "</button></div></form>";
+      '<div class="bp-card bp-submit"><div id="bpMsg"></div><button type="submit" class="btn btn-primary" id="bpSend" data-testid="bp-send">Next → ' + esc(IQ.label) + "</button>" +
+      '<p class="bp-help" style="margin-top:12px">When this part is done, Next takes you to the risk questionnaire. Nothing is sent until you submit there.</p></div></form>';
     window.scrollTo(0, keep);
   }
   function msg(cls, html) { var el = document.getElementById("bpMsg"); if (el) el.innerHTML = html ? '<div class="bp-msg ' + cls + '" data-testid="bp-msg">' + html + "</div>" : ""; }
@@ -429,30 +505,53 @@
   }
   root.addEventListener("submit", function (e) {
     e.preventDefault();
+    var miss = missing();
+    if (!miss.length && !iseqDef()) miss.push("Your details — Date of Birth (the questions you are asked next are worked out from it)");
+    if (miss.length) { msg("err", "<b>Please answer these before going on:</b><ul>" + miss.slice(0, 25).map(function (m) { return "<li>" + esc(m) + "</li>"; }).join("") + "</ul>"); return; }
+    state.step = 2; saveDraft(); render(); window.scrollTo(0, root.getBoundingClientRect().top + window.scrollY - 120);
+  });
+  root.addEventListener("click", function (e) {
+    var o = e.target.closest("[data-iseq]");
+    if (o) {
+      var f = iseqDef().fields.filter(function (x) { return x.k === o.getAttribute("data-iseq"); })[0];
+      if (f) { state.iseq[f.k] = f.opts[Number(o.getAttribute("data-i"))]; saveDraft(); render(); }
+      return;
+    }
+    if (e.target.closest("#bpBack")) { state.step = 1; render(); window.scrollTo(0, 0); return; }
+    if (e.target.closest("#bpSendAll")) sendAll();
+  });
+  function sendAll() {
     if (state.sending) return;
     var miss = missing();
+    if (miss.length) { state.step = 1; render(); msg("err", "<b>Please answer these on your Input Form first:</b><ul>" + miss.slice(0, 25).map(function (m) { return "<li>" + esc(m) + "</li>"; }).join("") + "</ul>"); return; }
+    var T = iseqDef();
+    T.fields.forEach(function (f) { if (f.req && state.iseq[f.k] === undefined) miss.push(IQ.label + " — Question " + (T.fields.indexOf(f) + 1)); });
     if (!state.consent) miss.push("Please tick the box to agree to be contacted");
-    if (miss.length) { msg("err", "<b>Please answer these before sending the form:</b><ul>" + miss.slice(0, 25).map(function (m) { return "<li>" + esc(m) + "</li>"; }).join("") + "</ul>"); return; }
+    if (miss.length) { msg("err", "<b>Please answer these before sending:</b><ul>" + miss.slice(0, 25).map(function (m) { return "<li>" + esc(m) + "</li>"; }).join("") + "</ul>"); return; }
+    var R2 = iseqScore();
+    var answers = {}; T.fields.forEach(function (f) { if (state.iseq[f.k] !== undefined) answers[f.k] = state.iseq[f.k]; });
     var B = Object.assign({}, state.basics);
     B.me_mobile = String(B.me_mobile || "").replace(/\D/g, "").slice(-10);
     if (B.me_pan) B.me_pan = B.me_pan.toUpperCase();
     var sheet = clone(state.sheet);
     // What "Your details" answered, carried into the sheet as BOSS does on submit.
     if (isSheet) fromBasicsFields().forEach(function (f) { if (!blank(B[f.fromBasics])) setIn(sheet, f.k, f.t === "num" ? Number(B[f.fromBasics]) : B[f.fromBasics]); });
-    var body = { goal: goalKey, basics: B, sheet: sheet, touched: isSheet ? touchedKeys() : undefined, consent: true };
+    var body = { goal: goalKey, basics: B, sheet: sheet, touched: isSheet ? touchedKeys() : undefined, consent: true,
+      iseq: { type: R2.type, answers: answers, raw: R2.raw, score: R2.score, max: R2.max, category: R2.category, note: R2.note,
+        equity: R2.alloc ? R2.alloc.equity : "", debt: R2.alloc ? R2.alloc.debt : "", gold: R2.alloc ? R2.alloc.gold : "", horizons: R2.horizons } };
     state.sending = true; render(); msg("ok", "Sending your form to our team…");
     fetch(LMS_URL + "/api/public/website-blueprint", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
       .then(function (res) { return res.json().catch(function () { return {}; }).then(function (d) { return { ok: res.ok, status: res.status, d: d }; }); })
       .then(function (x) {
         state.sending = false;
-        if (x.ok && x.d && x.d.ok) { try { localStorage.removeItem(DRAFT_KEY); } catch (er) { /* ignore */ } state.done = x.d.message || "Your form has reached our team."; render(); return; }
+        if (x.ok && x.d && x.d.ok) { try { localStorage.removeItem(DRAFT_KEY); } catch (er) { /* ignore */ } state.result = R2; state.done = x.d.message || "Your form has reached our team."; render(); return; }
         render();
         if (x.status === 400 && x.d && x.d.message) { msg("err", esc(x.d.message)); return; }
         if (x.status === 429) { msg("err", "Too many tries just now. Please wait a minute and press Submit again — nothing you typed is lost."); return; }
         fallback(B);
       })
       .catch(function () { state.sending = false; render(); fallback(B); });
-  });
+  }
   function fallback(B) {
     var text = "Hi Finowise, I filled in the " + goal.title + " blueprint form on your website but could not send it.\nName: " + (B.me_name || "") + "\nMobile: " + (B.me_mobile || "") + "\nEmail: " + (B.me_email || "");
     msg("err", "We could not send your form just now. Everything you typed is saved on this device — please try Submit again in a moment, or " +
@@ -466,7 +565,7 @@
   if (isSheet && goal.type === "SEVENEVENTS") (state.sheet.family || []).forEach(function (f) { if (!f.id) f.id = rid("SEF"); });
   state.basics.me_date = today();
   try { var c = JSON.parse(localStorage.getItem("fw_bp_contact") || "{}"); ["name", "mobile", "email", "city"].forEach(function (k) { if (c[k]) state.basics["me_" + k] = c[k]; }); } catch (er) { /* none */ }
-  if (draft && draft.sheet) { state.basics = Object.assign(state.basics, draft.basics || {}); state.sheet = Object.assign(state.sheet, draft.sheet); }
+  if (draft && draft.sheet) { state.basics = Object.assign(state.basics, draft.basics || {}); state.sheet = Object.assign(state.sheet, draft.sheet); state.iseq = draft.iseq || {}; }
   document.title = F.label + " — Blueprint Input Form | Freedom LifeX Group";
   render();
 })();
