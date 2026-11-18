@@ -312,43 +312,81 @@
       horizons: matrix ? matrix.map(function (r) { return r.horizon + " \u2014 " + r.what; }).join("\n") : "" };
   }
   function num(v) { var n = Number(v); return isFinite(n) ? String(Math.round(n * 100) / 100) : ""; }
-  function iseqPageHtml() {
-    var T = iseqDef(), age = ageOf(state.basics.me_dob);
-    var done = T.fields.filter(function (f) { return state.iseq[f.k] !== undefined; }).length, total = T.fields.length;
-    var who = (state.basics.me_name || "").trim();
-    return '<div class="bp-card bp-intro"><span class="bp-tag">Step 2 of 2</span><h2>' + esc(IQ.label) + '</h2><p>' + (who ? esc(who) + " — t" : "T") +
-      "hese " + total + " question" + (total === 1 ? "" : "s") + " are the ones that suit your age" + (age === null ? "" : " (" + age + ")") + ". There are no right answers, only what is true for you.</p></div>" +
-      '<div class="bp-card bp-iseq-prog"><div class="bp-dots">' + T.fields.map(function (f) { return '<i class="' + (state.iseq[f.k] !== undefined ? "on" : "") + '"></i>'; }).join("") +
-      '</div><div class="bp-muted" data-testid="bp-iseq-count">' + done + " of " + total + " answered</div></div>" +
-      T.fields.map(function (f, qi) {
-        return '<div class="bp-card bp-iseq-q" id="iseqq_' + esc(f.k) + '"><div class="bp-tag">Question ' + (qi + 1) + " of " + total + "</div><h3>" + esc(f.l) + "</h3>" +
-          (f.note ? '<p class="bp-help">' + esc(f.note) + "</p>" : "") + '<div class="bp-opts">' +
-          (f.opts || []).map(function (o, i) {
-            var on = state.iseq[f.k] === o;
-            return '<button type="button" class="bp-opt' + (on ? " on" : "") + '" data-iseq="' + esc(f.k) + '" data-i="' + i + '" data-testid="bp-iseq-' + esc(f.k) + "-" + i + '">' +
-              '<span class="bp-rad">' + (on ? "<i></i>" : "") + '</span><span class="bp-txt">' + esc(o) + '</span><span class="bp-ltr">' + "ABCDEF".charAt(i) + "</span></button>";
-          }).join("") + "</div></div>";
-      }).join("") +
-      '<div class="bp-card bp-submit"><label class="bp-consent"><input type="checkbox" id="bpConsent" data-testid="bp-consent"' + (state.consent ? " checked" : "") + "> I agree to share these details with the Finowise team and to be contacted about my blueprint.</label>" +
-      '<div id="bpMsg"></div><div class="bp-nav"><button type="button" class="btn btn-outline-dark" id="bpBack" data-testid="bp-back">← Back to your Input Form</button>' +
-      '<button type="button" class="btn btn-primary" id="bpSendAll" data-testid="bp-send-all"' + (state.sending ? " disabled" : "") + ">" + (state.sending ? "Sending…" : 'Submit everything <i class="fa-solid fa-paper-plane"></i>') + "</button></div>" +
-      '<p class="bp-help" style="margin-top:12px">Your Input Form is held as you left it — nothing is sent until you press Submit.</p></div>';
+  /* One question at a time, as BOSS's own ISEQ and FQ pages ask it: progress
+     dots, the question, lettered options; choosing one settles for a moment
+     and moves on. After the last, a short review and Submit everything. */
+  function iseqPos() {
+    var T = iseqDef(), n = T.fields.length;
+    if (typeof state.iqi !== "number" || state.iqi < 0) state.iqi = 0;
+    if (state.iqi > n) state.iqi = n;
+    return state.iqi;   // n means "all answered — review"
   }
-  // What the client sees once it is in: that it arrived, their risk profile, what happens next.
+  function iseqPageHtml() {
+    var T = iseqDef(), age = ageOf(state.basics.me_dob), total = T.fields.length, i = iseqPos();
+    var answered = T.fields.filter(function (f) { return state.iseq[f.k] !== undefined; }).length;
+    var who = (state.basics.me_name || "").trim();
+    var head = '<div class="fx-quiz-head"><span class="fx-pill"><span class="fxg bp-pill-ico">✦</span> ' + esc(IQ.label) + "</span>" +
+      '<button type="button" class="fx-btn ghost" id="bpBack" data-testid="bp-back">← Back to your Input Form</button></div>';
+    var intro = '<div class="bp-iq-intro">' + (who ? esc(who.split(/\s+/)[0]) + " — t" : "T") + "hese " + total + " question" + (total === 1 ? "" : "s") +
+      " are the ones that suit your age" + (age === null ? "" : " (" + age + ")") + ". There are no right answers, only what is true for you.</div>";
+    var dots = '<div class="fx-dots">' + T.fields.map(function (f, k) {
+      return '<i class="' + (k === i ? "now" : state.iseq[f.k] !== undefined ? "done" : "") + '"></i>'; }).join("") + "</div>";
+    var body;
+    if (i < total) {
+      var f = T.fields[i], picked = state.iseq[f.k];
+      body = '<div class="fx-quiz-card fx-glass fx-soft" data-testid="bp-iseq-card">' +
+        '<div class="bp-iq-top">' + dots + '<div class="fx-qidx" data-testid="bp-iseq-counter">Q ' + (i + 1) + " of " + total + " • " + esc(T.label) + "</div></div>" +
+        '<div style="margin-top:24px"><div class="fx-qsec">Investor Suitability</div><h3 class="fx-q" data-testid="bp-iseq-question">' + esc(f.l) + "</h3>" +
+        (f.note ? '<div class="bp-iq-note">' + esc(f.note) + "</div>" : "") + "</div>" +
+        '<div class="fx-opts">' + (f.opts || []).map(function (o, k) {
+          var on = picked === o;
+          return '<button type="button" class="fx-opt' + (on ? " sel" : "") + '" data-iseq="' + esc(f.k) + '" data-i="' + k + '" data-testid="bp-iseq-' + esc(f.k) + "-" + k + '">' +
+            '<span class="rad">' + (on ? "<i></i>" : "") + '</span><span class="txt">' + esc(o) + '</span><span class="ltr">' + "ABCDEF".charAt(k) + "</span></button>";
+        }).join("") + "</div>" +
+        '<div class="fx-qnav"><button type="button" class="fx-btn ghost" id="bpIqPrev"' + (i === 0 ? " disabled" : "") + ">← Previous</button>" +
+        '<div class="bp-iq-count" data-testid="bp-iseq-count">' + answered + " of " + total + " answered</div>" +
+        (picked !== undefined ? '<button type="button" class="fx-btn ghost" id="bpIqNext">Next →</button>' : '<span></span>') + "</div></div>";
+    } else {
+      body = '<div class="fx-reveal fx-glass fx-soft" data-testid="bp-iseq-review"><div class="tile fxg">✓</div>' +
+        '<h2>All ' + total + " questions answered</h2>" +
+        '<p class="bp-iq-sub">Your Input Form and your risk questionnaire are ready to go to your Finowise relationship manager. You can still go back and change any answer.</p>' +
+        '<div class="bp-iq-review">' + T.fields.map(function (q, k) {
+          return '<button type="button" class="bp-iq-row" data-iqgo="' + k + '"><span class="n">' + (k + 1) + '</span><span class="q">' + esc(q.l) + '</span><span class="a">' + esc(state.iseq[q.k] || "—") + "</span></button>";
+        }).join("") + "</div>" +
+        '<label class="bp-consent bp-iq-consent"><input type="checkbox" id="bpConsent" data-testid="bp-consent"' + (state.consent ? " checked" : "") + "> I agree to share these details with the Finowise team and to be contacted about my blueprint.</label>" +
+        '<div id="bpMsg"></div>' +
+        '<button type="button" class="fx-btn grad" style="width:100%" id="bpSendAll" data-testid="bp-send-all"' + (state.sending ? " disabled" : "") + ">" + (state.sending ? "Sending…" : "Submit everything →") + "</button>" +
+        '<div class="bp-iq-foot">Your Input Form is held as you left it — nothing is sent until you press Submit.</div></div>';
+    }
+    return '<div class="fqx bp-fqx"><div class="fx-quiz">' + head + intro + body + "</div></div>";
+  }
+  // What the client sees once it is in, in the FQ / ISEQ result's clothes:
+  // that it arrived, their risk profile, what happens next.
   function donePageHtml() {
     var r = state.result, circ = 326.56, pct = r && r.max ? Math.max(0, Math.min(100, Math.round(r.score / r.max * 100))) : 0;
-    return '<div class="bp-card bp-done" data-testid="bp-done"><div class="bp-tick">✓</div><h2>Thank you for your submission</h2><p>' + esc(state.done) + "</p></div>" +
-      (r ? '<div class="bp-card bp-iseq-res" data-testid="bp-iseq-result"><span class="bp-tag">ISEQ result</span>' +
-        '<div class="bp-ring"><svg viewBox="0 0 120 120" aria-label="ISEQ score ' + esc(num(r.score)) + " out of " + esc(num(r.max)) + '"><circle cx="60" cy="60" r="52" fill="none" stroke="#EEE8E2" stroke-width="12"></circle>' +
-        '<circle cx="60" cy="60" r="52" fill="none" stroke="var(--primary)" stroke-width="12" stroke-linecap="round" stroke-dasharray="' + (pct / 100 * circ).toFixed(2) + " " + circ + '" transform="rotate(-90 60 60)"></circle></svg>' +
-        '<div class="bp-ring-mid"><b data-testid="bp-iseq-score">' + esc(num(r.score)) + "</b><small>OF " + esc(num(r.max)) + "</small></div></div>" +
-        '<h3 data-testid="bp-iseq-category">' + esc(r.category) + "</h3>" + (r.note ? '<p class="bp-help" style="font-size:.92rem">' + esc(r.note) + "</p>" : "") +
-        (r.alloc ? '<h4 class="bp-tt">Primary asset allocation recommended for you</h4><div class="bp-alloc"><div><b>' + esc(r.alloc.equity) + "</b><span>Equity</span></div><div><b>" + esc(r.alloc.debt) + "</b><span>Debt</span></div><div><b>" + esc(r.alloc.gold) + "</b><span>Gold</span></div></div>" : "") +
-        (r.matrix ? '<h4 class="bp-tt">And what to hold, by how long the money is for</h4><div class="bp-tw"><table class="bp-t"><thead><tr><th>Investment duration</th><th>Time horizon</th><th>' + esc(r.category) + "</th></tr></thead><tbody>" +
-          r.matrix.map(function (m) { return "<tr><td>" + esc(m.duration) + "</td><td>" + esc(m.horizon) + "</td><td><b>" + esc(m.what) + "</b></td></tr>"; }).join("") + "</tbody></table></div>" : "") +
-        '<p class="bp-help" style="margin-top:10px">Your financial goals are time bound, so the horizon matters as much as the score' + (r.matrix ? ": the row your money falls in is the one to read" : "") + ". " +
-        (r.alloc ? "The split above is set against this score; c" : "C") + "hanging it needs your consent in writing.</p></div>" : "") +
-      '<div class="bp-card"><span class="bp-tag">What happens next</span><p style="margin:6px 0 0">Our team will connect with you shortly.</p><p style="margin-top:14px"><a class="btn btn-primary" href="solutions.html">Back to Solutions</a></p></div>';
+    var who = (state.basics.me_name || "").trim().split(/\s+/)[0];
+    var thanks = '<div class="fx-glass fx-soft fx-plate bp-iq-thanks" data-testid="bp-done"><div class="bp-iq-tick">✓</div>' +
+      '<h3 class="fx-band">Thank you for your submission</h3><p class="fx-banddesc">' + esc(state.done) + "</p></div>";
+    var res = r ? '<div class="fx-res-grid bp-iq-resgrid" data-testid="bp-iseq-result">' +
+      '<div class="fx-res-left fx-glass fx-soft"><div class="bp-iq-badge">ISEQ RESULT</div>' +
+        '<div style="margin-top:22px;display:flex;flex-direction:column;align-items:center;text-align:center">' +
+        '<div class="fx-ring"><svg viewBox="0 0 120 120" aria-label="ISEQ score ' + esc(num(r.score)) + " out of " + esc(num(r.max)) + '"><defs><linearGradient id="fxiseq" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#164B5E"></stop><stop offset="100%" stop-color="#F25C2A"></stop></linearGradient></defs>' +
+        '<circle cx="60" cy="60" r="52" fill="none" stroke="#EEE8E2" stroke-width="12"></circle><circle cx="60" cy="60" r="52" fill="none" stroke="url(#fxiseq)" stroke-width="12" stroke-linecap="round" stroke-dasharray="' + (pct / 100 * circ).toFixed(2) + " " + circ + '"></circle></svg>' +
+        '<div class="mid"><div><div class="num" data-testid="bp-iseq-score">' + esc(num(r.score)) + '</div><div class="cap">OF ' + esc(num(r.max)) + "</div></div></div></div>" +
+        '<h3 class="fx-band" data-testid="bp-iseq-category">' + esc(r.category) + "</h3>" + (r.note ? '<p class="fx-banddesc">' + esc(r.note) + "</p>" : "") +
+        '<div class="fx-chip" style="margin-top:16px">Investor Suitability' + (who ? " • " + esc(who) : "") + "</div></div></div>" +
+      '<div style="display:flex;flex-direction:column;gap:20px">' +
+        (r.alloc ? '<div class="fx-glass fx-soft fx-plate"><div class="fx-sechead">PRIMARY ASSET ALLOCATION RECOMMENDED FOR YOU</div><div class="fx-quads" style="margin-top:12px">' +
+          [["Equity", r.alloc.equity], ["Debt", r.alloc.debt], ["Gold", r.alloc.gold]].map(function (x) {
+            return '<div class="fx-quad"><div class="row"><div class="nm">' + esc(x[0]) + '</div></div><div class="big" style="margin-top:8px">' + esc(x[1]) + "</div></div>"; }).join("") + "</div></div>" : "") +
+        (r.matrix ? '<div class="fx-glass fx-soft fx-plate"><div class="fx-sechead">AND WHAT TO HOLD, BY HOW LONG THE MONEY IS FOR</div><div class="bp-tw" style="margin-top:12px"><table class="bp-t"><thead><tr><th>Investment duration</th><th>Time horizon</th><th>' + esc(r.category) + "</th></tr></thead><tbody>" +
+          r.matrix.map(function (m) { return "<tr><td>" + esc(m.duration) + "</td><td>" + esc(m.horizon) + "</td><td><b>" + esc(m.what) + "</b></td></tr>"; }).join("") + "</tbody></table></div>" +
+          '<div class="bp-iq-note" style="margin-top:10px">Your financial goals are time bound, so the horizon matters as much as the score: the row your money falls in is the one to read. ' +
+          (r.alloc ? "The split above is set against this score; c" : "C") + "hanging it needs your consent in writing.</div></div>" : "") +
+      "</div></div>" : "";
+    var next = '<div class="fx-cta fxg"><div class="in"><h4>What happens next</h4><div class="sub">Our team will connect with you shortly. Your relationship manager has your Input Form and your risk profile.</div>' +
+      '<div style="margin-top:16px;text-align:center"><a class="fx-btn grad bp-iq-home" href="solutions.html">Back to Solutions</a></div></div></div>';
+    return '<div class="fqx bp-fqx"><div class="fx-res bp-iq-done">' + thanks + res + next + "</div></div>";
   }
 
   /* ---------------- the page ---------------- */
@@ -359,9 +397,9 @@
       return;
     }
     if (state.step === 2 && iseqDef()) {
-      var keep2 = window.scrollY;
       root.innerHTML = iseqPageHtml();
-      window.scrollTo(0, keep2);
+      var top = root.getBoundingClientRect().top + window.scrollY - 100;
+      if (window.scrollY > top) window.scrollTo({ top: top, behavior: "smooth" });
       return;
     }
     var keep = window.scrollY;
@@ -508,15 +546,27 @@
     var miss = missing();
     if (!miss.length && !iseqDef()) miss.push("Your details — Date of Birth (the questions you are asked next are worked out from it)");
     if (miss.length) { msg("err", "<b>Please answer these before going on:</b><ul>" + miss.slice(0, 25).map(function (m) { return "<li>" + esc(m) + "</li>"; }).join("") + "</ul>"); return; }
-    state.step = 2; saveDraft(); render(); window.scrollTo(0, root.getBoundingClientRect().top + window.scrollY - 120);
+    state.step = 2;
+    var TT = iseqDef(); state.iqi = TT.fields.filter(function (x) { return state.iseq[x.k] !== undefined; }).length >= TT.fields.length ? TT.fields.length
+      : Math.max(0, TT.fields.findIndex(function (x) { return state.iseq[x.k] === undefined; }));
+    saveDraft(); render(); window.scrollTo(0, root.getBoundingClientRect().top + window.scrollY - 120);
   });
   root.addEventListener("click", function (e) {
     var o = e.target.closest("[data-iseq]");
     if (o) {
       var f = iseqDef().fields.filter(function (x) { return x.k === o.getAttribute("data-iseq"); })[0];
-      if (f) { state.iseq[f.k] = f.opts[Number(o.getAttribute("data-i"))]; saveDraft(); render(); }
+      if (f) {
+        state.iseq[f.k] = f.opts[Number(o.getAttribute("data-i"))]; saveDraft(); render();
+        // It settles for a moment so the choice is seen, then moves on.
+        var at = state.iqi;
+        setTimeout(function () { if (state.step === 2 && !state.done && state.iqi === at) { state.iqi = at + 1; render(); } }, 350);
+      }
       return;
     }
+    if (e.target.closest("#bpIqPrev")) { if (state.iqi > 0) { state.iqi--; render(); } return; }
+    if (e.target.closest("#bpIqNext")) { state.iqi++; render(); return; }
+    var go = e.target.closest("[data-iqgo]");
+    if (go) { state.iqi = Number(go.getAttribute("data-iqgo")); render(); return; }
     if (e.target.closest("#bpBack")) { state.step = 1; render(); window.scrollTo(0, 0); return; }
     if (e.target.closest("#bpSendAll")) sendAll();
   });
@@ -525,7 +575,8 @@
     var miss = missing();
     if (miss.length) { state.step = 1; render(); msg("err", "<b>Please answer these on your Input Form first:</b><ul>" + miss.slice(0, 25).map(function (m) { return "<li>" + esc(m) + "</li>"; }).join("") + "</ul>"); return; }
     var T = iseqDef();
-    T.fields.forEach(function (f) { if (f.req && state.iseq[f.k] === undefined) miss.push(IQ.label + " — Question " + (T.fields.indexOf(f) + 1)); });
+    var firstGap = T.fields.findIndex(function (f) { return f.req && state.iseq[f.k] === undefined; });
+    if (firstGap >= 0) { state.iqi = firstGap; render(); return; }
     if (!state.consent) miss.push("Please tick the box to agree to be contacted");
     if (miss.length) { msg("err", "<b>Please answer these before sending:</b><ul>" + miss.slice(0, 25).map(function (m) { return "<li>" + esc(m) + "</li>"; }).join("") + "</ul>"); return; }
     var R2 = iseqScore();
